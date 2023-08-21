@@ -7,6 +7,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
+const cors = require('cors');
+
+app.use(cors());
 
 // MongoDB
 const MONGODB_URI = 'mongodb://localhost/newsletter_app';
@@ -15,10 +18,7 @@ mongoose.connect(MONGODB_URI);
 // Mailgun
 const mailer = new NodeMailgun();
 
-// mailer.apiKey = 'd5f2b3f5e1354af28393cc0cc7e234c7-ee16bf1a-38bc24b4';
-// mailer.domain = 'sandbox8b5c461a52ed44469758906f83cd1231.mailgun.org';
-// mailer.fromEmail = 'ideas@autigift.com';
-// mailer.fromTitle = 'Autogift Inc';
+
 
 // mailer.init();
 
@@ -30,7 +30,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello, world!');
 });
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
@@ -38,11 +38,13 @@ app.listen(PORT, () => {
 
 // REGISTER
 app.post('/register', async (req: Request, res: Response) => {
+    console.log("register called");
     const { email } = req.body;
 
     // Check if a user with this email already exists
     if (await User.findOne({ email })) {
         // TODO: Log in the user instead
+        console.log("user already exists");
         return res.status(400).send({ error: 'User with this email already exists' });
     }
 
@@ -53,14 +55,19 @@ app.post('/register', async (req: Request, res: Response) => {
     const user = new User({ email, loginCode, loginCodeExpires: Date.now() + 15 * 60 * 1000 }); // Login code expires in 15 minutes
 
     // Save the user to the database
+    console.log("saving user");
     await user.save();
+    console.log("user saved");
+    
 
-    const mailOptions = {
-        from: process.env.MAILGUN_FROM_EMAIL,
-        to: email,
-        subject: 'Your Login Code',
-        text: `Your login code is ${loginCode}`
-    };
+    res.send({ email });
+
+    // const mailOptions = {
+    //     from: process.env.MAILGUN_FROM_EMAIL,
+    //     to: email,
+    //     subject: 'Your Login Code',
+    //     text: `Your login code is ${loginCode}`
+    // };
 
     // mailer
     //     .send(email, 'Your Login Code', `<h1>Your login code is ${loginCode}</h1>`)
@@ -94,6 +101,14 @@ app.post('/users/:userId/friends', async (req: Request, res: Response) => {
     await user.save();
   
     res.send({ message: 'Friend added', user });
+
+    // Remove sensitive data before sending response
+    const userForClient = user.toObject();
+    delete userForClient.loginCode;
+    delete userForClient.loginCodeExpires;
+
+    // Send the user data
+    res.status(201).send(userForClient);
 });
 
 // Edit friend
