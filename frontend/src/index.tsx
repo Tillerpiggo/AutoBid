@@ -1,20 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-//import App from './App';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter as Router } from "react-router-dom";
 
 const rootElement = document.getElementById('root');
 
 if (rootElement) {
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(
-    <React.StrictMode>
-        <div>hello</div>
-    </React.StrictMode>
-  );
+    // @ts-ignore
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(
+        <React.StrictMode>
+            <Router>
+                <App />
+            </Router>
+        </React.StrictMode>
+    );
 } else {
-  throw new Error("The root element could not be found");
+    throw new Error("The root element could not be found");
 }
 
 reportWebVitals();

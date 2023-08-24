@@ -1,25 +1,34 @@
 import React, { useState, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Register: React.FC = () => {
     const [email, setEmail] = useState<string>('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
 
-        const response = await fetch('http://localhost:3000/register', {
+        console.log("handling submit");
+
+        fetch('http://localhost:3000/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email }),
-        });
+            body: JSON.stringify({ email: 'test@example.com' }),
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
 
-        if (response.ok) {
-            const data = await response.json();
-            alert(data.message);
-        } else {
-            alert('Failed to register');
-        }
+        // if (response.ok) {
+        //     const data = await response.json();
+        //     alert(data.message);
+
+        //     navigate(`/user/${data}`);
+        // } else {
+        //     alert('Failed to register');
+        // }
     };
 
     return (
