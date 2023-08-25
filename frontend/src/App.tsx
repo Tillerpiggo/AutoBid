@@ -1,14 +1,18 @@
 import React from 'react';
 import Register from './Register';
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import UserDisplay from './UserDisplay'
 
 const App: React.FC = () => {
     return (
         <div className="App">
-            <Routes>
-                <Route path="/" element={<Register/>} />
-                <Route path="/" element={<h1>User's Name!!</h1>} />
-            </Routes>
+            <p>Yup</p>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Register />} />
+                    <Route path="/user/:email" element={<UserDisplay />} />
+                </Routes>
+            </BrowserRouter>
         </div>
   );
 }

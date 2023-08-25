@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IUser extends Document {
+    id: string;
     email: string;
     loginCode: string;
     loginCodeExpires: Date;
@@ -10,6 +11,7 @@ export interface IUser extends Document {
 }
 
 export interface IFriend extends Document {
+    id: string;
     name: string;
     birthday: Date;
 }

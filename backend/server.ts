@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import mongoose from 'mongoose';
+import mongoose, { ObjectId } from 'mongoose';
 import User, { IUser, IFriend } from './models/User';
 import { NodeMailgun } from 'ts-mailgun';
 import dotenv from 'dotenv';
@@ -42,10 +42,12 @@ app.post('/register', async (req: Request, res: Response) => {
     const { email } = req.body;
 
     // Check if a user with this email already exists
-    if (await User.findOne({ email })) {
-        // TODO: Log in the user instead
-        console.log("user already exists");
-        return res.status(400).send({ error: 'User with this email already exists' });
+    const existingUser = await User.findOne({ email: email });
+
+    if (existingUser) {
+        console.log("Existing user: " + existingUser);
+        res.send({ user: existingUser });
+        return
     }
 
     // Generate a 6-digit login code
@@ -58,39 +60,26 @@ app.post('/register', async (req: Request, res: Response) => {
     console.log("saving user");
     await user.save();
     console.log("user saved");
-    
+    user.id = user._id.toString();
 
-    res.send({ email });
-
-    // const mailOptions = {
-    //     from: process.env.MAILGUN_FROM_EMAIL,
-    //     to: email,
-    //     subject: 'Your Login Code',
-    //     text: `Your login code is ${loginCode}`
-    // };
-
-    // mailer
-    //     .send(email, 'Your Login Code', `<h1>Your login code is ${loginCode}</h1>`)
-    //     .then(() => {
-    //         res.send({ message: 'User registered, check your email for your login code' });
-    //     })
-    //     .catch((error) => {
-    //         console.error(error);
-    //         res.status(500).send({ error: 'Failed to send email' });
-    //     });
+    res.send({ user });
+    console.log("user email: " + user.email);
+    console.log("user id: " + user._id.toString());
 });
 
 // MANIPULATE FRIENDS
 
 // Add friend
-app.post('/users/:userId/friends', async (req: Request, res: Response) => {
-    const { userId } = req.params;
+app.post('/users/:userEmail/friends', async (req: Request, res: Response) => {
+    const { userEmail } = req.params;
     const { name, birthday } = req.body;
+
+    console.log("finding user with email: " + userEmail);
   
-    // Find the user by ID
-    const user = await User.findById(userId);
+    // Find the user by email
+    const user = await User.findOne({ email: userEmail });
     if (!user) {
-        return res.status(404).send({ error: 'User not found' });
+        //return res.status(404).send({ error: 'User not found' });
     }
   
     // Add the new friend to the user's list of friends
@@ -99,16 +88,15 @@ app.post('/users/:userId/friends', async (req: Request, res: Response) => {
   
     // Save the user
     await user.save();
-  
-    res.send({ message: 'Friend added', user });
 
     // Remove sensitive data before sending response
     const userForClient = user.toObject();
+    userForClient.id = userForClient._id.toString();
+    delete userForClient._id;
     delete userForClient.loginCode;
     delete userForClient.loginCodeExpires;
-
-    // Send the user data
-    res.status(201).send(userForClient);
+  
+    res.send({ message: 'Friend added', userForClient });
 });
 
 // Edit friend

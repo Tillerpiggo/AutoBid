@@ -1,20 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import UserDisplay from "./UserDisplay"
 
 const rootElement = document.getElementById('root');
 
 if (rootElement) {
     // @ts-ignore
-    const root = ReactDOM.createRoot(rootElement);
+    const root = createRoot(rootElement);
     root.render(
         <React.StrictMode>
-            <Router>
-                <App />
-            </Router>
+            <App />
         </React.StrictMode>
     );
 } else {

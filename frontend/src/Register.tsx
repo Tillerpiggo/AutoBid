@@ -15,20 +15,14 @@ const Register: React.FC = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email: 'test@example.com' }),
+            body: JSON.stringify({ email: email }),
         })
         .then(response => response.json())
-        .then(data => console.log(data))
+        .then(data => {
+            console.log(data);
+            navigate(`/user/${data.user.email}`, { state: { user: data } })
+        })
         .catch(error => console.error('Error:', error));
-
-        // if (response.ok) {
-        //     const data = await response.json();
-        //     alert(data.message);
-
-        //     navigate(`/user/${data}`);
-        // } else {
-        //     alert('Failed to register');
-        // }
     };
 
     return (
