@@ -45,7 +45,8 @@ const UserDisplay: React.FC = () => {
 
         // Now you can update your local state with the updated user data
         // For instance, if you're using useState to manage user state:
-        setUserData(updatedUser);
+        setUserData(updatedUser.userForClient);
+        console.log("updatedUser: ", updatedUser.userForClient);
     };
 
     if (!userData) {

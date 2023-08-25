@@ -20,9 +20,9 @@ const FriendList: React.FC<FriendListProps> = ({ friends, onAddFriend, onEditFri
 
     return (
         <div>
-            {friends && friends.map(friend => (
+            {friends && friends.map((friend, index) => (
                 <FriendItem
-                    key={friend.id}
+                    key={index}
                     friend={friend}
                     onEdit={onEditFriend}
                     onDelete={onDeleteFriend}

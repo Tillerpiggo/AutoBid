@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import mongoose, { ObjectId } from 'mongoose';
-import User, { IUser, IFriend } from './models/User';
+import User, { Friend, IUser, IFriend } from './models/User';
 import { NodeMailgun } from 'ts-mailgun';
 import dotenv from 'dotenv';
 
@@ -83,7 +83,9 @@ app.post('/users/:userEmail/friends', async (req: Request, res: Response) => {
     }
   
     // Add the new friend to the user's list of friends
-    const newFriend = { name, birthday } as IFriend;
+    //const newFriend = { name, birthday } as IFriend;
+    const newFriend = new Friend({ name, birthday });
+    newFriend.id = newFriend._id.toString();
     user.friends.push(newFriend);
   
     // Save the user

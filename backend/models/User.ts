@@ -32,4 +32,6 @@ UserSchema.methods.getFriend = function (id: string) {
     return this.friends.find((friend: IFriend) => friend._id.toString() === id);
 };
 
+export const Friend = mongoose.model<IFriend>('Friend', FriendSchema);
+
 export default mongoose.model<IUser>('User', UserSchema);
