@@ -1,19 +1,17 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
+export interface IFriend extends Document {
+    name: string;
+    birthday: Date;
+}
+
 export interface IUser extends Document {
-    id: string;
     email: string;
     loginCode: string;
     loginCodeExpires: Date;
     friends: IFriend[];
 
-    getFriend: (id: string) => IFriend;
-}
-
-export interface IFriend extends Document {
-    id: string;
-    name: string;
-    birthday: Date;
+    getFriend: (id: string) => IFriend | undefined;
 }
 
 const FriendSchema: Schema = new Schema<IFriend>({

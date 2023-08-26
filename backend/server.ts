@@ -1,8 +1,26 @@
 import express, { Request, Response } from 'express'
 import mongoose, { ObjectId } from 'mongoose';
-import User, { Friend, IUser, IFriend } from './models/User';
-import { NodeMailgun } from 'ts-mailgun';
+import User, { Friend } from './models/User';
 import dotenv from 'dotenv';
+import crypto from 'crypto';
+
+dotenv.config();
+
+const mailchimpFactory = require("@mailchimp/mailchimp_transactional/src/index.js");
+const mailchimp = mailchimpFactory(process.env.MAILCHIMP_API_KEY);
+
+// TEST MAILCHIMP
+async function run() {
+    const response = await mailchimp.users.ping();
+    console.log(response);
+}
+  
+run();
+
+interface MemberData {
+    email_address: string;
+    status: string;
+}
 
 dotenv.config();
 
@@ -15,20 +33,8 @@ app.use(cors());
 const MONGODB_URI = 'mongodb://localhost/newsletter_app';
 mongoose.connect(MONGODB_URI);
 
-// Mailgun
-const mailer = new NodeMailgun();
-
-
-
-// mailer.init();
-
 // Express Middleware
 app.use(express.json());
-
-// Test route
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello, world!');
-});
 
 const PORT = process.env.PORT || 3000;
 
@@ -36,14 +42,8 @@ app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
 });
 
-function prepareUserForClient(user: IUser): IUser {
-    const userForClient = user.toObject();
-    userForClient.id = userForClient._id.toString();
-    delete userForClient._id;
-    delete userForClient.loginCode;
-    delete userForClient.loginCodeExpires;
-
-    return userForClient;
+function computeMemberId(email: string): string {
+    return crypto.createHash('md5').update(email.toLowerCase()).digest("hex");
 }
 
 // REGISTER
@@ -73,6 +73,19 @@ app.post('/register', async (req: Request, res: Response) => {
 
     console.log("new user ", user);
 
+    const memberData: MemberData = {
+        email_address: email,
+        status: 'subscribed',
+    };
+
+    mailchimp.post(`/lists/your_list_id/members/`, memberData)
+        .then((results: any) => {
+        console.log('New member added successfully.');
+    })
+    .catch((err: any) => {
+        console.error('Error: ' + err);
+    });
+
     res.send({ user });
     console.log("user email: " + user.email);
     console.log("user id: " + user._id.toString());
@@ -94,21 +107,14 @@ app.post('/users/:userEmail/friends', async (req: Request, res: Response) => {
     }
   
     // Add the new friend to the user's list of friends
-    //const newFriend = { name, birthday } as IFriend;
     const newFriend = new Friend({ name, birthday });
-    newFriend.id = newFriend._id.toString();
     user.friends.push(newFriend);
-
-    console.log("new Friend: ", newFriend);
   
     // Save the user
     await user.save();
 
-    console.log("user with new friend: ", user);
-
     // Remove sensitive data before sending response
-    const userForClient = prepareUserForClient(user);
-    res.send({ message: 'Friend added', userForClient });
+    res.send({ message: 'Friend added', user });
 });
 
 // Edit friend
@@ -123,7 +129,7 @@ app.put('/users/:userId/friends/:friendId', async (req: Request, res: Response) 
     }
   
     // Find the friend by ID
-    const friend = user.friends.find(friend => friend.id === friendId);
+    const friend = user.friends.find(friend => friend._id.toString() === friendId);
     if (!friend) {
         return res.status(404).send({ error: 'Friend not found' });
     }
