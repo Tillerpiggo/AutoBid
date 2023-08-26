@@ -36,6 +36,16 @@ app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
 });
 
+function prepareUserForClient(user: IUser): IUser {
+    const userForClient = user.toObject();
+    userForClient.id = userForClient._id.toString();
+    delete userForClient._id;
+    delete userForClient.loginCode;
+    delete userForClient.loginCodeExpires;
+
+    return userForClient;
+}
+
 // REGISTER
 app.post('/register', async (req: Request, res: Response) => {
     console.log("register called");
@@ -60,7 +70,8 @@ app.post('/register', async (req: Request, res: Response) => {
     console.log("saving user");
     await user.save();
     console.log("user saved");
-    user.id = user._id.toString();
+
+    console.log("new user ", user);
 
     res.send({ user });
     console.log("user email: " + user.email);
@@ -87,17 +98,16 @@ app.post('/users/:userEmail/friends', async (req: Request, res: Response) => {
     const newFriend = new Friend({ name, birthday });
     newFriend.id = newFriend._id.toString();
     user.friends.push(newFriend);
+
+    console.log("new Friend: ", newFriend);
   
     // Save the user
     await user.save();
 
+    console.log("user with new friend: ", user);
+
     // Remove sensitive data before sending response
-    const userForClient = user.toObject();
-    userForClient.id = userForClient._id.toString();
-    delete userForClient._id;
-    delete userForClient.loginCode;
-    delete userForClient.loginCodeExpires;
-  
+    const userForClient = prepareUserForClient(user);
     res.send({ message: 'Friend added', userForClient });
 });
 
@@ -153,15 +163,16 @@ app.put('/users/:userId/friends/:friendId', async (req: Request, res: Response) 
 //     res.send({ message: 'Friend deleted', user });
 // });
 
-// Get friends list for user
-app.get('/users/:userId', async (req: Request, res: Response) => {
-    const { userId } = req.params;
+// Get user from email
+app.get('/users/:email', async (req: Request, res: Response) => {
+    const { email } = req.params;
   
     // Find the user by ID
-    const user = await User.findById(userId);
+    const user = await User.findOne({ email: email });
     if (!user) {
         return res.status(404).send({ error: 'User not found' });
     }
-  
+
+    //const userForClient = prepareUserForClient(user);
     res.send({ user });
 });

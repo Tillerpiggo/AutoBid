@@ -25,7 +25,6 @@ const FriendList: React.FC<FriendListProps> = ({ friends, onAddFriend, onEditFri
                     key={index}
                     friend={friend}
                     onEdit={onEditFriend}
-                    onDelete={onDeleteFriend}
                 />
             ))}
             {isAdding && <FriendForm onSubmit={handleAddFriend} />}

@@ -16,8 +16,10 @@ class FriendForm extends React.Component<FriendFormProps, FriendFormState> {
         super(props);
         this.state = {
             name: this.props.friend?.name || "", // use the friend prop if available, otherwise default to ""
-            birthday: this.props.friend?.birthday.toISOString().slice(0, 10) || "" // use the friend prop if available, otherwise default to ""
+            birthday: this.props.friend?.birthday.toString().slice(0, 10) || "" // use the friend prop if available, otherwise default to ""
         };
+
+        console.log("friend: ", this.props.friend || "no friend...");
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);

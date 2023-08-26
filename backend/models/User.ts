@@ -28,6 +28,22 @@ const UserSchema: Schema = new Schema<IUser>({
     friends: [FriendSchema],
 });
 
+UserSchema.virtual('id').get(function(this: IUser) {
+    return this._id.toHexString();
+});
+
+UserSchema.set('toJSON', {
+    virtuals: true
+});
+
+FriendSchema.virtual('id').get(function(this: IFriend) {
+    return this._id.toHexString();
+});
+
+FriendSchema.set('toJSON', {
+    virtuals: true
+});
+
 UserSchema.methods.getFriend = function (id: string) {
     return this.friends.find((friend: IFriend) => friend._id.toString() === id);
 };
