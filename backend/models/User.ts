@@ -7,8 +7,6 @@ export interface IFriend extends Document {
 
 export interface IUser extends Document {
     email: string;
-    loginCode: string;
-    loginCodeExpires: Date;
     friends: IFriend[];
 
     getFriend: (id: string) => IFriend | undefined;
@@ -21,9 +19,7 @@ const FriendSchema: Schema = new Schema<IFriend>({
 
 const UserSchema: Schema = new Schema<IUser>({
     email: { type: String, required: true, unique: true },
-    loginCode: { type: String, required: true },
-    loginCodeExpires: { type: Date },
-    friends: [FriendSchema],
+    friends: [FriendSchema]
 });
 
 UserSchema.virtual('id').get(function(this: IUser) {
