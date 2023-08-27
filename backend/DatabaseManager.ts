@@ -24,12 +24,12 @@ export default class DatabaseManager {
         return user;
     }
 
-    async addFriendToUser(userEmail: string, name: string, birthday: string) {
-        const user = await this.getUserByEmail(userEmail);
-
+    async addFriendToUser(userId: string, name: string, birthday: string) {
+        const user = await this.getUserById(userId); // Changed to getUserById
+    
         const newFriend = new Friend({ name, birthday });
         user.friends.push(newFriend);
-
+    
         await user.save();
         return user;
     }
@@ -41,6 +41,23 @@ export default class DatabaseManager {
         if (name) friend.name = name;
         if (birthday) friend.birthday = new Date(birthday);
 
+        await user.save();
+        return user;
+    }
+
+    async deleteUser(id: string) {
+        return await User.findByIdAndDelete(id);
+    }
+
+    async deleteFriend(userId: string, friendId: string) {
+        const user = await User.findById(userId);
+    
+        if (!user) {
+            throw new Error("User not found");
+        }
+    
+        user.friends = user.friends.filter(friend => friend._id.toString() !== friendId);
+    
         await user.save();
         return user;
     }

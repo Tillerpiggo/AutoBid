@@ -1,10 +1,10 @@
 import { Friend } from './interfaces';
 import React, { useState } from 'react';
 
-interface FriendFormProps {
+export interface FriendFormProps {
     friend?: Friend;
     onSubmit: (friend: Friend) => Promise<void>;
-    onDelete?: () => Promise<void>;
+    onDelete?: (friendId: string) => Promise<void>; // updated to take friendId as input
 }
 
 const FriendForm: React.FC<FriendFormProps> = ({ friend, onSubmit, onDelete }) => {
@@ -25,7 +25,7 @@ const FriendForm: React.FC<FriendFormProps> = ({ friend, onSubmit, onDelete }) =
         setIsSubmitting(true);
         
         const newFriend: Friend = {
-            id: friend?.id || "", // use the friend prop if available, otherwise default to an empty string or generate a unique ID
+            id: friend?.id || "", 
             name: name,
             birthday: new Date(birthday)
         };
@@ -35,9 +35,9 @@ const FriendForm: React.FC<FriendFormProps> = ({ friend, onSubmit, onDelete }) =
     };
 
     const handleDelete = async () => {
-        if(onDelete) {
+        if(onDelete && friend?.id) {
             setIsSubmitting(true);
-            await onDelete();
+            await onDelete(friend.id); // pass the friend's id to the onDelete function
             setIsSubmitting(false);
         }
     };
@@ -52,7 +52,7 @@ const FriendForm: React.FC<FriendFormProps> = ({ friend, onSubmit, onDelete }) =
                 Birthday:
                 <input type="date" name="birthday" value={birthday} onChange={handleInputChange} disabled={isSubmitting} />
             </label>
-            <button type="submit" disabled={isSubmitting}>{friend ? "Update" : "Add"}</button> {/* change the button label based on the context */}
+            <button type="submit" disabled={isSubmitting}>{friend ? "Update" : "Add"}</button>
             {friend && onDelete && <button type="button" onClick={handleDelete} disabled={isSubmitting}>Delete</button>}
         </form>
     )

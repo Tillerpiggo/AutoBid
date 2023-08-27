@@ -60,5 +60,22 @@ export const userService = {
             console.error('Failed to add friend', error);
             return null;
         }
+    },
+
+    deleteFriend: async (userId: string, friendId: string): Promise<User | null> => {
+        try {
+            const response = await axios.delete(`${API_BASE_URL}/users/${userId}/friends/${friendId}`);
+
+            if (response.data && response.data.message === 'Friend deleted') {
+                console.log('Friend deleted successfully');
+                return response.data.user;
+            } else {
+                console.error('Failed to delete friend');
+                return null;
+            }
+        } catch (error) {
+            console.error('Failed to delete friend', error);
+            return null;
+        }
     }
 };

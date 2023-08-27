@@ -33,9 +33,13 @@ const friendController = FriendController(databaseManager);
 app.post('/register', userController.registerUser);
 app.get('/users/:userId', userController.getUserById); 
 
+// Add deleteUser route
+app.delete('/users/:userId', userController.deleteUser); 
+
 // Friend routes
-app.post('/users/:userEmail/friends', friendController.addFriend);
+app.post('/users/:userId/friends', friendController.addFriend);
 app.put('/users/:userId/friends/:friendId', friendController.updateFriend);
+app.delete('/users/:userId/friends/:friendId', friendController.deleteFriend);
 
 app.post('/debug/send-emails', async (req: Request, res: Response) => {
     emailManager.sendEmailsNow();

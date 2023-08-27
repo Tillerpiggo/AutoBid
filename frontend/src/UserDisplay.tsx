@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { User, Friend } from './interfaces';
 import FriendList from './FriendList';
+import FriendFormModal from './FriendFormModal'; // import the FriendFormModal component
 import { useParams } from 'react-router-dom';
 import { userService } from './userService';
 
@@ -20,28 +21,43 @@ const UserDisplay: React.FC = () => {
     
         fetchUserData();
     }, [userId]);
-    
+
+    const handleFriendAdd = async (friend: Friend) => {
+        await handleFriendSubmit(friend);
+    };
+
     const handleFriendSubmit = async (friend: Friend) => {
         if (!userId) {
             console.error('No user ID provided');
             return;
         }
     
+        let updatedUser: User | null = null;
+    
         if (friend.id) {
-            const updatedUser = await userService.updateFriend(userId, friend);
-            if (updatedUser) {
-                setUserData(updatedUser);
-            }
+            updatedUser = await userService.updateFriend(userId, friend);
         } else {
-            const updatedUser = await userService.addFriend(userId, friend);
-            if (updatedUser) {
-                setUserData(updatedUser);
-            }
+            updatedUser = await userService.addFriend(userId, friend);
+        }
+    
+        if (updatedUser) {
+            setUserData(updatedUser);
         }
     };
 
-    const handleFriendDelete = async (id: string) => {
-        // TODO: Call a userService.deleteFriend function and update the user data
+    const handleFriendDelete = async (friendId: string) => {
+        if (!userId) {
+            console.error('No user ID provided');
+            return;
+        }
+    
+        const updatedUser = await userService.deleteFriend(userId, friendId);
+    
+        if (updatedUser) {
+            setUserData(updatedUser);
+        } else {
+            console.error('Failed to delete friend or update user data');
+        }
     };
 
     if (!userData) {
@@ -55,9 +71,10 @@ const UserDisplay: React.FC = () => {
             <h2>Friends</h2>
             <FriendList 
                 friends={userData.friends} 
-                onSubmitFriend={handleFriendSubmit}
+                onEditFriend={handleFriendSubmit}
                 onDeleteFriend={handleFriendDelete}
             />
+            <FriendFormModal onSubmit={handleFriendAdd} onDelete={handleFriendDelete} /> {/* Add FriendFormModal */}
         </div>
     );
 }
