@@ -1,34 +1,42 @@
 import { Friend } from './interfaces';
 import FriendItem from './FriendItem';
-import FriendForm from './FriendForm';
+import FriendEditor from './FriendEditor';
 import React, { useState } from 'react';
 
 interface FriendListProps {
     friends: Friend[];
-    onAddFriend: (friend: Friend) => void;
     onEditFriend: (friend: Friend) => void;
     onDeleteFriend: (id: string) => void;
+    onFriendUpdated: (updatedUser: User) => void;
+    userId: string | undefined;
 }
 
-const FriendList: React.FC<FriendListProps> = ({ friends, onAddFriend, onEditFriend, onDeleteFriend }) => {
-    const [isAdding, setIsAdding] = useState(false);
+const FriendList: React.FC<FriendListProps> = ({ friends, onEditFriend, onDeleteFriend, onFriendUpdated, userId }) => {
+    const [editingFriend, setEditingFriend] = useState<Friend | null>(null);
 
-    const handleAddFriend = (friend: Friend) => {
-        onAddFriend(friend);
-        setIsAdding(false);
+    const handleEditComplete = () => {
+        setEditingFriend(null); // Reset the editingFriend after the friend has been edited
     };
 
     return (
         <div>
-            {friends && friends.map((friend, index) => (
-                <FriendItem
-                    key={index}
-                    friend={friend}
-                    onEdit={onEditFriend}
-                />
+            {friends && friends.map((friend) => (
+                editingFriend && editingFriend.id === friend.id ? (
+                    <FriendEditor 
+                        key={friend.id}
+                        friend={friend}
+                        userId={userId}
+                        onFriendUpdated={onFriendUpdated}
+                        onEditComplete={handleEditComplete}
+                    />
+                ) : (
+                    <FriendItem
+                        key={friend.id}
+                        friend={friend}
+                        onEdit={() => setEditingFriend(friend)}
+                    />
+                )
             ))}
-            {isAdding && <FriendForm onSubmit={handleAddFriend} />}
-            {!isAdding && <button onClick={() => setIsAdding(true)}>Add Friend</button>}
         </div>
     )
 }

@@ -20,7 +20,7 @@ const Register: React.FC = () => {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            navigate(`/user/${data.user.email}`, { state: { user: data } })
+            navigate(`/user/${data.user.id}`, { state: { user: data } })
         })
         .catch(error => console.error('Error:', error));
     };

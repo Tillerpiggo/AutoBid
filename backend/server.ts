@@ -31,7 +31,7 @@ const friendController = FriendController(databaseManager);
 
 // User routes
 app.post('/register', userController.registerUser);
-app.get('/users/:email', userController.getUserByEmail);
+app.get('/users/:userId', userController.getUserById); 
 
 // Friend routes
 app.post('/users/:userEmail/friends', friendController.addFriend);

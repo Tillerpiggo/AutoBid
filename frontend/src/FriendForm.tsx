@@ -7,8 +7,10 @@ interface FriendFormState {
 }
 
 interface FriendFormProps {
-    friend?: Friend; // make this prop optional
+    friend?: Friend;
     onSubmit: (friend: Friend) => void;
+    isSubmitting: boolean; // Add the isSubmitting prop here.
+    onDelete?: () => void; // Add the onDelete prop here.
 }
 
 class FriendForm extends React.Component<FriendFormProps, FriendFormState> {
@@ -46,13 +48,14 @@ class FriendForm extends React.Component<FriendFormProps, FriendFormState> {
             <form onSubmit={this.handleSubmit}>
                 <label>
                     Name:
-                    <input type="text" name="name" value={this.state.name} onChange={this.handleInputChange} />
+                    <input type="text" name="name" value={this.state.name} onChange={this.handleInputChange} disabled={this.props.isSubmitting} />
                 </label>
                 <label>
                     Birthday:
-                    <input type="date" name="birthday" value={this.state.birthday} onChange={this.handleInputChange} />
+                    <input type="date" name="birthday" value={this.state.birthday} onChange={this.handleInputChange} disabled={this.props.isSubmitting} />
                 </label>
-                <button type="submit">{this.props.friend ? "Update" : "Add"}</button> {/* change the button label based on the context */}
+                <button type="submit" disabled={this.props.isSubmitting}>{this.props.friend ? "Update" : "Add"}</button> {/* change the button label based on the context */}
+                {this.props.friend && this.props.onDelete && <button type="button" onClick={this.props.onDelete} disabled={this.props.isSubmitting}>Delete</button>}
             </form>
         )
     }

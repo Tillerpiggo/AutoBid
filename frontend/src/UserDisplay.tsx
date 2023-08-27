@@ -6,13 +6,13 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const UserDisplay: React.FC = () => {
-    const { email } = useParams<{ email: string }>();
+    const { userId } = useParams<{ userId: string }>();
     const [userData, setUserData] = useState<User | null>(null);
     const [editingFriend, setEditingFriend] = useState<Friend | null>(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
-            const response = await fetch(`http://localhost:3000/users/${email}`);
+            const response = await fetch(`http://localhost:3000/users/${userId}`);
             if (!response.ok) {
                 console.error('Failed to fetch user data');
                 return;
@@ -22,34 +22,19 @@ const UserDisplay: React.FC = () => {
         };
 
         fetchUserData();
-    }, [email]);
+    }, [userId]);
+    
 
     const handleEditFriend = (friend: Friend) => {
         setEditingFriend(friend);
     }
 
-    const handleSubmitEditFriend = async (friend: Friend) => {
-        if (!userData) {
-            console.error('User data is not loaded');
-            return;
-        }
+    const handleFriendUpdated = (updatedUser: User) => {
+        setUserData(updatedUser);
+    };
 
-        try {
-            const response = await axios.put(`http://localhost:3000/users/${userData.id}/friends/${friend.id}`, {
-                name: friend.name,
-                birthday: friend.birthday
-            });
-
-            if (response.data && response.data.message === 'Friend updated') {
-                console.log('Friend updated successfully');
-                setUserData(response.data.user);
-                setEditingFriend(null); // Close the form after successful update
-            } else {
-                console.error('Failed to update friend');
-            }
-        } catch (error) {
-            console.error('Failed to update friend', error);
-        }
+    const handleEditComplete = () => {
+        setEditingFriend(null);
     };
 
     const handleDeleteFriend = (id: string) => {
@@ -71,15 +56,12 @@ const UserDisplay: React.FC = () => {
         });
 
         if (!response.ok) {
-            // Handle error...
             console.error('Failed to add friend');
             return;
         }
 
         const updatedUser = await response.json();
 
-        // Now you can update your local state with the updated user data
-        // For instance, if you're using useState to manage user state:
         setUserData(updatedUser.user);
         console.log("updatedUser: ", updatedUser.user);
     };

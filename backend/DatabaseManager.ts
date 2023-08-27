@@ -14,6 +14,10 @@ export default class DatabaseManager {
         return await User.findOne({ email });
     }
 
+    async getUserById(id: string) {
+        return await User.findById(id);
+    }
+
     async createUser(email: string) {
         const user = new User({ email });
         await user.save();
