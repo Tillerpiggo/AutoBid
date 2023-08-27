@@ -3,12 +3,12 @@ import DatabaseManager from '../DatabaseManager';
 
 export const UserController = (databaseManager: DatabaseManager) => {
     const registerUser = async (req: Request, res: Response) => {
-        const { email } = req.body;
-        const existingUser = await databaseManager.getUserByEmail(email);
+        const { email, timezone } = req.body;
+        const existingUser = await databaseManager.getUserByEmail(email.toLowerCase());
         if (existingUser) {
             return res.send({ user: existingUser });
         }
-        const user = await databaseManager.createUser(email);
+        const user = await databaseManager.createUser(email.toLowerCase(), timezone);
         res.send({ user });
     };
 
@@ -20,6 +20,21 @@ export const UserController = (databaseManager: DatabaseManager) => {
         }
         res.send({ user });
       
+    };
+
+    const updateUser = async (req: Request, res: Response) => {
+        const { userId } = req.params;
+        const { timezone, emailSendTime } = req.body;
+        try {
+            const user = await databaseManager.updateUser(userId, timezone, emailSendTime);
+            if (!user) {
+                return res.status(404).send({ error: 'User not found' });
+            }
+            res.send({ message: 'User updated', user });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({ error: 'An error occurred while updating the user' });
+        }
     };
 
     const deleteUser = async (req: Request, res: Response) => {
@@ -38,7 +53,7 @@ export const UserController = (databaseManager: DatabaseManager) => {
             console.error(error);
             res.status(500).send({ message: 'An error occurred while deleting the user' });
         }
-    }
+    };
 
-    return { registerUser, getUserById, deleteUser };
+    return { registerUser, getUserById, updateUser, deleteUser };
 };

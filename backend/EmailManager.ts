@@ -79,7 +79,7 @@ class EmailManager {
     }
 
     startDailyJob() {
-        schedule.scheduleJob('0 9 * * *', async () => {
+        schedule.scheduleJob('26 19 * * *', async () => {
             console.log("sending emails");
             await this.sendEmailsForToday();
         });

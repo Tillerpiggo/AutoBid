@@ -32,6 +32,7 @@ const friendController = FriendController(databaseManager);
 // User routes
 app.post('/register', userController.registerUser);
 app.get('/users/:userId', userController.getUserById); 
+app.put('/users/:userId', userController.updateUser);
 
 // Add deleteUser route
 app.delete('/users/:userId', userController.deleteUser); 

@@ -7,6 +7,8 @@ export interface IFriend extends Document {
 
 export interface IUser extends Document {
     email: string;
+    timezone: string;
+    emailSendTime: string; // Added line
     friends: IFriend[];
 
     getFriend: (id: string) => IFriend | undefined;
@@ -19,6 +21,8 @@ const FriendSchema: Schema = new Schema<IFriend>({
 
 const UserSchema: Schema = new Schema<IUser>({
     email: { type: String, required: true, unique: true },
+    timezone: { type: String, required: true },
+    emailSendTime: { type: String, required: true, match: /^([01]\d|2[0-3]):([0-5]\d)$/ }, // Added line
     friends: [FriendSchema]
 });
 

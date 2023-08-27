@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { User, Friend } from './interfaces';
 import FriendList from './FriendList';
-import FriendFormModal from './FriendFormModal'; // import the FriendFormModal component
+import FriendFormModal from './FriendFormModal';
 import { useParams } from 'react-router-dom';
 import { userService } from './userService';
+import TimeSettings from './TimeSettings';
 
 const UserDisplay: React.FC = () => {
     const { userId } = useParams<{ userId: string }>();
@@ -60,6 +61,26 @@ const UserDisplay: React.FC = () => {
         }
     };
 
+    const handleTimeChange = async (newTime: string) => {
+        if (!userId || !userData) {
+            console.error('No user ID provided or user data not loaded');
+            return;
+        }
+        const updatedUser = await userService.updateUser(userId, userData.timezone, newTime);
+        setUserData(updatedUser);
+        console.log('New time:', newTime);
+    }
+
+    const handleTimezoneChange = async (newTimezone: string) => {
+        if (!userId || !userData) {
+            console.error('No user ID provided or user data not loaded');
+            return;
+        }
+        const updatedUser = await userService.updateUser(userId, newTimezone, userData.emailSendTime);
+        setUserData(updatedUser);
+        console.log('New timezone:', newTimezone);
+    }
+
     if (!userData) {
         return <div>Loading...</div>;
     }
@@ -75,6 +96,12 @@ const UserDisplay: React.FC = () => {
                 onDeleteFriend={handleFriendDelete}
             />
             <FriendFormModal onSubmit={handleFriendAdd} onDelete={handleFriendDelete} /> {/* Add FriendFormModal */}
+            <TimeSettings 
+                initialTime={userData.emailSendTime}
+                initialTimezone={userData.timezone}
+                onTimeChange={handleTimeChange}
+                onTimezoneChange={handleTimezoneChange}
+            />
         </div>
     );
 }

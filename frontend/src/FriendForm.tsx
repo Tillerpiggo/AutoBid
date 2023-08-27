@@ -8,10 +8,7 @@ export interface FriendFormProps {
 }
 
 const FriendForm: React.FC<FriendFormProps> = ({ friend, onSubmit, onDelete }) => {
-    console.log(`Initial friend birthday from props in UTC: ${friend?.birthday}`);
-
     const initialBirthday = friend?.birthday ? new Date(friend.birthday).toISOString().slice(0, 10) : "";
-    console.log(`Initial birthday for state (local): ${initialBirthday}`);
     const [name, setName] = useState(friend?.name || "");
     const [birthday, setBirthday] = useState(initialBirthday);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -20,7 +17,6 @@ const FriendForm: React.FC<FriendFormProps> = ({ friend, onSubmit, onDelete }) =
         if (event.target.name === 'name') {
             setName(event.target.value);
         } else if (event.target.name === 'birthday') {
-            console.log(`New birthday input (local): ${event.target.value}`);
             setBirthday(event.target.value);
         }
     };
@@ -28,17 +24,13 @@ const FriendForm: React.FC<FriendFormProps> = ({ friend, onSubmit, onDelete }) =
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setIsSubmitting(true);
-
-        const utcBirthday = new Date(birthday);
-        console.log(`Converted birthday to Date object (UTC): ${utcBirthday}`);
         
         const newFriend: Friend = {
             id: friend?.id || "", 
             name: name,
-            birthday: utcBirthday
+            birthday: new Date(birthday)
         };
 
-        console.log(`Submitting new friend object with birthday (UTC): ${newFriend.birthday}`);
         await onSubmit(newFriend);
         setIsSubmitting(false);
     };

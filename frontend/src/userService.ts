@@ -62,6 +62,26 @@ export const userService = {
         }
     },
 
+    updateUser: async (userId: string, timezone: string, emailSendTime: string): Promise<User | null> => {
+        try {
+            const response = await axios.put(`${API_BASE_URL}/users/${userId}`, {
+                timezone,
+                emailSendTime,
+            });
+
+            if (response.data && response.data.message === 'User updated') {
+                console.log('User updated successfully');
+                return response.data.user;
+            } else {
+                console.error('Failed to update user');
+                return null;
+            }
+        } catch (error) {
+            console.error('Failed to update user', error);
+            return null;
+        }
+    },
+
     deleteFriend: async (userId: string, friendId: string): Promise<User | null> => {
         try {
             const response = await axios.delete(`${API_BASE_URL}/users/${userId}/friends/${friendId}`);
@@ -77,5 +97,5 @@ export const userService = {
             console.error('Failed to delete friend', error);
             return null;
         }
-    }
+    },
 };
