@@ -4,18 +4,23 @@ import React, { useState } from 'react';
 export interface FriendFormProps {
     friend?: Friend;
     onSubmit: (friend: Friend) => Promise<void>;
-    onDelete?: (friendId: string) => Promise<void>; // updated to take friendId as input
+    onDelete?: (friendId: string) => Promise<void>;
 }
 
 const FriendForm: React.FC<FriendFormProps> = ({ friend, onSubmit, onDelete }) => {
+    console.log(`Initial friend birthday from props in UTC: ${friend?.birthday}`);
+
+    const initialBirthday = friend?.birthday ? new Date(friend.birthday).toISOString().slice(0, 10) : "";
+    console.log(`Initial birthday for state (local): ${initialBirthday}`);
     const [name, setName] = useState(friend?.name || "");
-    const [birthday, setBirthday] = useState(friend?.birthday.toString().slice(0, 10) || "");
+    const [birthday, setBirthday] = useState(initialBirthday);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.name === 'name') {
             setName(event.target.value);
         } else if (event.target.name === 'birthday') {
+            console.log(`New birthday input (local): ${event.target.value}`);
             setBirthday(event.target.value);
         }
     };
@@ -23,13 +28,17 @@ const FriendForm: React.FC<FriendFormProps> = ({ friend, onSubmit, onDelete }) =
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setIsSubmitting(true);
+
+        const utcBirthday = new Date(birthday);
+        console.log(`Converted birthday to Date object (UTC): ${utcBirthday}`);
         
         const newFriend: Friend = {
             id: friend?.id || "", 
             name: name,
-            birthday: new Date(birthday)
+            birthday: utcBirthday
         };
 
+        console.log(`Submitting new friend object with birthday (UTC): ${newFriend.birthday}`);
         await onSubmit(newFriend);
         setIsSubmitting(false);
     };
@@ -37,7 +46,7 @@ const FriendForm: React.FC<FriendFormProps> = ({ friend, onSubmit, onDelete }) =
     const handleDelete = async () => {
         if(onDelete && friend?.id) {
             setIsSubmitting(true);
-            await onDelete(friend.id); // pass the friend's id to the onDelete function
+            await onDelete(friend.id);
             setIsSubmitting(false);
         }
     };
