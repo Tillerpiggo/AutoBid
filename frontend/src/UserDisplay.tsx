@@ -1,69 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import { User, Friend } from './interfaces';
 import FriendList from './FriendList';
-import FriendForm from './FriendForm';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import { userService } from './userService';
 
 const UserDisplay: React.FC = () => {
     const { userId } = useParams<{ userId: string }>();
     const [userData, setUserData] = useState<User | null>(null);
-    const [editingFriend, setEditingFriend] = useState<Friend | null>(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
-            const response = await fetch(`http://localhost:3000/users/${userId}`);
-            if (!response.ok) {
-                console.error('Failed to fetch user data');
+            if (!userId) {
+                console.error('No user ID provided');
                 return;
             }
-            const data = await response.json();
-            setUserData(data.user);
+            const user = await userService.getUser(userId);
+            setUserData(user);
         };
-
+    
         fetchUserData();
     }, [userId]);
     
-
-    const handleEditFriend = (friend: Friend) => {
-        setEditingFriend(friend);
-    }
-
-    const handleFriendUpdated = (updatedUser: User) => {
-        setUserData(updatedUser);
-    };
-
-    const handleEditComplete = () => {
-        setEditingFriend(null);
-    };
-
-    const handleDeleteFriend = (id: string) => {
-        // Add your logic to delete friend
-    }
-
-    const handleAddFriend = async (newFriend: Friend) => {
-        if (!userData) {
-            console.error('User data is not available');
+    const handleFriendSubmit = async (friend: Friend) => {
+        if (!userId) {
+            console.error('No user ID provided');
             return;
         }
-
-        const response = await fetch(`http://localhost:3000/users/${userData.email}/friends`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name: newFriend.name, birthday: newFriend.birthday }),
-        });
-
-        if (!response.ok) {
-            console.error('Failed to add friend');
-            return;
+    
+        if (friend.id) {
+            const updatedUser = await userService.updateFriend(userId, friend);
+            if (updatedUser) {
+                setUserData(updatedUser);
+            }
+        } else {
+            const updatedUser = await userService.addFriend(userId, friend);
+            if (updatedUser) {
+                setUserData(updatedUser);
+            }
         }
+    };
 
-        const updatedUser = await response.json();
-
-        setUserData(updatedUser.user);
-        console.log("updatedUser: ", updatedUser.user);
+    const handleFriendDelete = async (id: string) => {
+        // TODO: Call a userService.deleteFriend function and update the user data
     };
 
     if (!userData) {
@@ -75,16 +53,11 @@ const UserDisplay: React.FC = () => {
             <h1>User Display</h1>
             <p>Email: {userData.email}</p>
             <h2>Friends</h2>
-            {editingFriend ? (
-                <FriendForm friend={editingFriend} onSubmit={handleSubmitEditFriend} />
-            ) : (
-                <FriendList 
-                    friends={userData.friends} 
-                    onAddFriend={handleAddFriend}
-                    onEditFriend={handleEditFriend} 
-                    onDeleteFriend={handleDeleteFriend} 
-                />
-            )}
+            <FriendList 
+                friends={userData.friends} 
+                onSubmitFriend={handleFriendSubmit}
+                onDeleteFriend={handleFriendDelete}
+            />
         </div>
     );
 }

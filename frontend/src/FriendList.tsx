@@ -1,33 +1,40 @@
 import { Friend } from './interfaces';
 import FriendItem from './FriendItem';
-import FriendEditor from './FriendEditor';
+import FriendForm from './FriendForm';
 import React, { useState } from 'react';
 
 interface FriendListProps {
     friends: Friend[];
-    onEditFriend: (friend: Friend) => void;
-    onDeleteFriend: (id: string) => void;
-    onFriendUpdated: (updatedUser: User) => void;
-    userId: string | undefined;
+    onSubmitFriend: (friend: Friend) => Promise<void>;
+    onDeleteFriend: (id: string) => Promise<void>;
 }
 
-const FriendList: React.FC<FriendListProps> = ({ friends, onEditFriend, onDeleteFriend, onFriendUpdated, userId }) => {
+const FriendList: React.FC<FriendListProps> = ({ friends, onSubmitFriend, onDeleteFriend }) => {
     const [editingFriend, setEditingFriend] = useState<Friend | null>(null);
 
     const handleEditComplete = () => {
         setEditingFriend(null); // Reset the editingFriend after the friend has been edited
     };
 
+    const handleFormSubmit = async (friend: Friend) => {
+        await onSubmitFriend(friend);
+        handleEditComplete();
+    };
+
+    const handleDeleteFriend = async (id: string) => {
+        await onDeleteFriend(id);
+        handleEditComplete();
+    };
+
     return (
         <div>
             {friends && friends.map((friend) => (
                 editingFriend && editingFriend.id === friend.id ? (
-                    <FriendEditor 
+                    <FriendForm 
                         key={friend.id}
                         friend={friend}
-                        userId={userId}
-                        onFriendUpdated={onFriendUpdated}
-                        onEditComplete={handleEditComplete}
+                        onSubmit={handleFormSubmit}
+                        onDelete={() => handleDeleteFriend(friend.id)}
                     />
                 ) : (
                     <FriendItem
