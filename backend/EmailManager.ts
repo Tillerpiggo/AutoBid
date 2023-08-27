@@ -71,16 +71,6 @@ class EmailManager {
             console.log("sending emails");
             await this.sendEmailsForToday();
         });
-
-        let date = new Date(Date.now() + (2 * 60 * 1000));
-
-        schedule.scheduleJob(date, async () => {
-
-            console.log('Job running!');
-            await this.sendEmailsForToday();
-            console.log('Job complete');
-
-        });
     }
 }
 
