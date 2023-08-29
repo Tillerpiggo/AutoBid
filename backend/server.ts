@@ -6,7 +6,7 @@ import EmailManager from './EmailManager';
 import DatabaseManager from './DatabaseManager';
 
 import { UserController } from './controllers/UserController';
-import { FriendController } from './controllers/FriendController';
+import { ContactController } from './controllers/ContactController';
 
 // Setup the app
 const app = express();
@@ -27,7 +27,7 @@ emailManager.startDailyJob();
 
 // Setup controllers
 const userController = UserController(databaseManager);
-const friendController = FriendController(databaseManager);
+const contactController = ContactController(databaseManager);
 
 // User routes
 app.post('/register', userController.registerUser);
@@ -37,10 +37,10 @@ app.put('/users/:userId', userController.updateUser);
 // Add deleteUser route
 app.delete('/users/:userId', userController.deleteUser); 
 
-// Friend routes
-app.post('/users/:userId/friends', friendController.addFriend);
-app.put('/users/:userId/friends/:friendId', friendController.updateFriend);
-app.delete('/users/:userId/friends/:friendId', friendController.deleteFriend);
+// Contact routes
+app.post('/users/:userId/contacts', contactController.addContact);
+app.put('/users/:userId/contacts/:contactId', contactController.updateContact);
+app.delete('/users/:userId/contacts/:contactId', contactController.deleteContact);
 
 app.post('/debug/send-emails', async (req: Request, res: Response) => {
     emailManager.sendEmailsNow();

@@ -1,4 +1,4 @@
-import User, { Friend } from './models/User';
+import User, { Contact } from './models/User';
 import mongoose from 'mongoose';
 import moment from 'moment-timezone';
 
@@ -25,18 +25,18 @@ export default class DatabaseManager {
         return user;
     }
 
-    async addFriendToUser(userId: string, name: string, birthday: string) {
+    async addContactToUser(userId: string, name: string, birthday: string) {
         const user = await this.getUserById(userId); // Changed to getUserById
     
-        const newFriend = new Friend({ name, birthday });
-        user.friends.push(newFriend);
+        const newContact = new Contact({ name, birthday });
+        user.contacts.push(newContact);
     
         await user.save();
         return user;
     }
 
-    async updateFriend(userId: string, friendId: string, name: string, birthday: string) {
-        console.log(`Updating friend with ID ${friendId} for user with ID ${userId}`);
+    async updateContact(userId: string, contactId: string, name: string, birthday: string) {
+        console.log(`Updating contact with ID ${contactId} for user with ID ${userId}`);
         
         const user = await User.findById(userId);
         if (!user) {
@@ -44,22 +44,22 @@ export default class DatabaseManager {
             return;
         }
     
-        const friend = user.friends.find(friend => friend._id.toString() === friendId);
-        if (!friend) {
-            console.error(`Friend with ID ${friendId} not found`);
+        const contact = user.contacts.find(contact => contact._id.toString() === contactId);
+        if (!contact) {
+            console.error(`Contact with ID ${contactId} not found`);
             return;
         }
     
         if (name) {
-            console.log(`Updating name from ${friend.name} to ${name}`);
-            friend.name = name;
+            console.log(`Updating name from ${contact.name} to ${name}`);
+            contact.name = name;
         }
     
         if (birthday) {
-            console.log(`Updating birthday from ${friend.birthday}`);
+            console.log(`Updating birthday from ${contact.birthday}`);
             const newBirthday = moment.tz(birthday, 'YYYY-MM-DD', user.timezone).startOf('day').toDate();
             console.log(`to ${newBirthday}`);
-            friend.birthday = newBirthday;
+            contact.birthday = newBirthday;
         }
     
         await user.save();
@@ -71,14 +71,14 @@ export default class DatabaseManager {
         return await User.findByIdAndDelete(id);
     }
 
-    async deleteFriend(userId: string, friendId: string) {
+    async deleteContact(userId: string, contactId: string) {
         const user = await User.findById(userId);
     
         if (!user) {
             throw new Error("User not found");
         }
     
-        user.friends = user.friends.filter(friend => friend._id.toString() !== friendId);
+        user.contacts = user.contacts.filter(contact => contact._id.toString() !== contactId);
     
         await user.save();
         return user;

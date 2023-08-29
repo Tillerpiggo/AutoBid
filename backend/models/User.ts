@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export interface IFriend extends Document {
+export interface IContact extends Document {
     name: string;
     birthday: Date;
 }
@@ -9,12 +9,12 @@ export interface IUser extends Document {
     email: string;
     timezone: string;
     emailSendTime: string; // Added line
-    friends: IFriend[];
+    contacts: IContact[];
 
-    getFriend: (id: string) => IFriend | undefined;
+    getContact: (id: string) => IContact | undefined;
 }
 
-const FriendSchema: Schema = new Schema<IFriend>({
+const ContactSchema: Schema = new Schema<IContact>({
     name: { type: String, required: true },
     birthday: { type: Date, required: true }
 });
@@ -23,7 +23,7 @@ const UserSchema: Schema = new Schema<IUser>({
     email: { type: String, required: true, unique: true },
     timezone: { type: String, required: true },
     emailSendTime: { type: String, required: true, match: /^([01]\d|2[0-3]):([0-5]\d)$/ }, // Added line
-    friends: [FriendSchema]
+    contacts: [ContactSchema]
 });
 
 UserSchema.virtual('id').get(function(this: IUser) {
@@ -34,18 +34,18 @@ UserSchema.set('toJSON', {
     virtuals: true
 });
 
-FriendSchema.virtual('id').get(function(this: IFriend) {
+ContactSchema.virtual('id').get(function(this: IContact) {
     return this._id.toHexString();
 });
 
-FriendSchema.set('toJSON', {
+ContactSchema.set('toJSON', {
     virtuals: true
 });
 
-UserSchema.methods.getFriend = function (id: string) {
-    return this.friends.find((friend: IFriend) => friend._id.toString() === id);
+UserSchema.methods.getcontact = function (id: string) {
+    return this.contacts.find((contact: IContact) => contact._id.toString() === id);
 };
 
-export const Friend = mongoose.model<IFriend>('Friend', FriendSchema);
+export const Contact = mongoose.model<IContact>('Contact', ContactSchema);
 
 export default mongoose.model<IUser>('User', UserSchema);

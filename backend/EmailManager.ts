@@ -38,22 +38,22 @@ class EmailManager {
                 const nowInUserTimezone = moment().tz(user.timezone);
                 console.log(`User's timezone is ${user.timezone}, and the current date/time in their timezone is ${nowInUserTimezone.format()}`);
     
-                for (const friend of user.friends) {
-                    // Convert friend's birthday to user's timezone
-                    let friendBirthdayInUserTimezone = moment.utc(friend.birthday).tz(user.timezone);
+                for (const contact of user.contacts) {
+                    // Convert contacts's birthday to user's timezone
+                    let contactBirthdayInUserTimezone = moment.utc(contact.birthday).tz(user.timezone);
                     // Remove minutes, seconds, and hours so it's just comparing day
-                    friendBirthdayInUserTimezone.year(nowInUserTimezone.year()).month(nowInUserTimezone.month()).date(nowInUserTimezone.date());
-                    console.log(`Friend's birthday is ${friend.birthday}, and in the user's timezone, this is ${friendBirthdayInUserTimezone.format()}`);
+                    contactBirthdayInUserTimezone.year(nowInUserTimezone.year()).month(nowInUserTimezone.month()).date(nowInUserTimezone.date());
+                    console.log(`Contact's birthday is ${contact.birthday}, and in the user's timezone, this is ${contactBirthdayInUserTimezone.format()}`);
     
-                    if (friendBirthdayInUserTimezone.isSame(nowInUserTimezone, 'day')) {
-                        console.log(`It's ${friend.name}'s birthday today in the user's timezone!`);
+                    if (contactBirthdayInUserTimezone.isSame(nowInUserTimezone, 'day')) {
+                        console.log(`It's ${contact.name}'s birthday today in the user's timezone!`);
                         emailsToSend.push({
                             to: user.email,
-                            subject: `It's ${friend.name}'s Birthday Today!`,
-                            message: `Don't forget to wish ${friend.name} a happy birthday!`
+                            subject: `It's ${contact.name}'s Birthday Today!`,
+                            message: `Don't forget to wish ${contact.name} a happy birthday!`
                         });
                     } else {
-                        console.log(`It's not ${friend.name}'s birthday today in the user's timezone.`);
+                        console.log(`It's not ${contact.name}'s birthday today in the user's timezone.`);
                     }
                 }
             }

@@ -21,7 +21,7 @@ export const userService = {
 
     updateContact: async (userId: string, editedContact: Contact): Promise<User | null> => {
         try {
-            const response = await axios.put(`${API_BASE_URL}/users/${userId}/friends/${editedContact.id}`, {
+            const response = await axios.put(`${API_BASE_URL}/users/${userId}/contacts/${editedContact.id}`, {
                 name: editedContact.name,
                 birthday: editedContact.birthday
             });
@@ -42,7 +42,7 @@ export const userService = {
     addContact: async (userId: string, newContact: Omit<Contact, 'id'>): Promise<User | null> => {
         console.log("trying to add contact");
         try {
-            const response = await fetch(`${API_BASE_URL}/users/${userId}/friends`, {
+            const response = await fetch(`${API_BASE_URL}/users/${userId}/contacts`, {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export const userService = {
 
     deleteContact: async (userId: string, contactId: string): Promise<User | null> => {
         try {
-            const response = await axios.delete(`${API_BASE_URL}/users/${userId}/friends/${contactId}`);
+            const response = await axios.delete(`${API_BASE_URL}/users/${userId}/contacts/${contactId}`);
 
             if (response.data && response.data.message === 'Contact deleted') {
                 console.log('Contact deleted successfully');
