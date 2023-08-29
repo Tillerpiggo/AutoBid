@@ -1,4 +1,4 @@
-import { Friend } from './interfaces';
+import { Contact } from './interfaces';
 import React, { useState, useEffect } from 'react';
 import {
     Box,
@@ -12,21 +12,21 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react'
 
-export interface FriendFormProps {
-    friend?: Friend;
-    onSubmit: (friend: Friend) => Promise<void>;
+export interface ContactFormProps {
+    contact?: Contact;
+    onSubmit: (contact: Contact) => Promise<void>;
 }
 
-const FriendForm: React.FC<FriendFormProps> = ({ friend, onSubmit }) => {
-    const initialBirthday = friend?.birthday ? new Date(friend.birthday).toISOString().slice(0, 10) : "";
-    const [name, setName] = useState(friend?.name || "");
+const ContactForm: React.FC<ContactFormProps> = ({ contact, onSubmit }) => {
+    const initialBirthday = contact?.birthday ? new Date(contact.birthday).toISOString().slice(0, 10) : "";
+    const [name, setName] = useState(contact?.name || "");
     const [birthday, setBirthday] = useState(initialBirthday);
     const [initialState, setInitialState] = useState({ name, birthday });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         setInitialState({ name, birthday });
-    }, [friend]);
+    }, [contact]);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.name === 'name') {
@@ -40,13 +40,13 @@ const FriendForm: React.FC<FriendFormProps> = ({ friend, onSubmit }) => {
         event.preventDefault();
         setIsSubmitting(true);
 
-        const newFriend: Friend = {
-            id: friend?.id || "", 
+        const newContact: Contact = {
+            id: contact?.id || "", 
             name: name,
             birthday: new Date(birthday)
         };
 
-        await onSubmit(newFriend);
+        await onSubmit(newContact);
         setIsSubmitting(false);
     };
 
@@ -60,7 +60,7 @@ const FriendForm: React.FC<FriendFormProps> = ({ friend, onSubmit }) => {
             px={4}
             py={8}
             textAlign={'left'}>
-            <Heading size="md" mb={6}>{friend ? "Edit Contact" : "Add Contact"}</Heading>
+            <Heading size="md" mb={6}>{contact ? "Edit Contact" : "Add Contact"}</Heading>
             <FormControl id="name">
                 <FormLabel>Name</FormLabel>
                 <Input type="text" name="name" value={name} onChange={handleInputChange} isDisabled={isSubmitting} />
@@ -76,7 +76,7 @@ const FriendForm: React.FC<FriendFormProps> = ({ friend, onSubmit }) => {
                     rounded={'full'}
                     type="submit"
                     onClick={handleSubmit}
-                    isDisabled={friend ? isUpdateButtonDisabled : isAddButtonDisabled}
+                    isDisabled={contact ? isUpdateButtonDisabled : isAddButtonDisabled}
                     bg={'red.400'}
                     color={'white'}
                     _hover={{
@@ -85,11 +85,11 @@ const FriendForm: React.FC<FriendFormProps> = ({ friend, onSubmit }) => {
                     _focus={{
                         bg: 'red.500',
                     }}>
-                    {friend ? "Update" : "Add"}
+                    {contact ? "Update" : "Add"}
                 </Button>
             </Stack>
         </Box>
     )
 }
 
-export default FriendForm;
+export default ContactForm;

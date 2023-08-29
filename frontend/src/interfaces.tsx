@@ -1,12 +1,12 @@
 export interface User {
     id: string;
     email: string;
-    friends: Friend[];
+    contacts: Contact[];
     timezone: string;
     emailSendTime: string;
 }
 
-export interface Friend {
+export interface Contact {
     id: string;
     name: string;
     birthday: Date;

@@ -1,20 +1,15 @@
 import { Box, Button, Flex, Heading, HStack, Tag, Text, useColorModeValue, Avatar, Badge } from '@chakra-ui/react';
 import React from 'react';
 import ContactOptions from './ContactOptions';
+import { Contact } from './interfaces';
 
-interface Friend {
-    id: string;
-    name: string;
-    birthday: Date;
-}
-
-interface FriendDetailProps {
-    friend: Friend;
+interface ContactDetailProps {
+    contact: Contact;
     onEdit: () => void;
     onDelete: () => void;
 }
 
-const FriendDetail: React.FC<FriendDetailProps> = ({ friend, onEdit, onDelete }) => {
+const ContactDetail: React.FC<ContactDetailProps> = ({ contact, onEdit, onDelete }) => {
     return (
         <Box
             maxW={"320px"}
@@ -40,10 +35,10 @@ const FriendDetail: React.FC<FriendDetailProps> = ({ friend, onEdit, onDelete })
             />
 
             <Heading fontSize={"2xl"} fontFamily={"body"}>
-                {friend.name}
+                {contact.name}
             </Heading>
             <Text fontWeight={600} color={"gray.500"} mb={4}>
-                {new Date(friend.birthday).toLocaleDateString()}
+                {new Date(contact.birthday).toLocaleDateString()}
             </Text>
 
             <HStack spacing={4} justify="center" align="center">
@@ -88,4 +83,4 @@ const FriendDetail: React.FC<FriendDetailProps> = ({ friend, onEdit, onDelete })
     );
 }
 
-export default FriendDetail;
+export default ContactDetail;

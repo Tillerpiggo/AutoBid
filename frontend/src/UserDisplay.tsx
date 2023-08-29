@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { User, Friend } from './interfaces';
-import FriendList from './FriendList';
-import FriendForm from './FriendForm';
+import { User, Contact } from './interfaces';
+import ContactList from './ContactList';
+import ContactForm from './ContactForm';
 import { useParams } from 'react-router-dom';
 import { userService } from './userService';
 import TimeSettings from './TimeSettings';
@@ -28,12 +28,12 @@ const UserDisplay: React.FC = () => {
         fetchUserData();
     }, [userId]);
 
-    const handleFriendAdd = async (friend: Friend) => {
-        await handleFriendSubmit(friend);
+    const handleContactAdd = async (contact: Contact) => {
+        await handleContactSubmit(contact);
         onClose();
     };
 
-    const handleFriendSubmit = async (friend: Friend) => {
+    const handleContactSubmit = async (contact: Contact) => {
         if (!userId) {
             console.error('No user ID provided');
             return;
@@ -41,10 +41,10 @@ const UserDisplay: React.FC = () => {
     
         let updatedUser: User | null = null;
     
-        if (friend.id) {
-            updatedUser = await userService.updateFriend(userId, friend);
+        if (contact.id) {
+            updatedUser = await userService.updateContact(userId, contact);
         } else {
-            updatedUser = await userService.addFriend(userId, friend);
+            updatedUser = await userService.addContact(userId, contact);
         }
     
         if (updatedUser) {
@@ -52,18 +52,18 @@ const UserDisplay: React.FC = () => {
         }
     };
 
-    const handleFriendDelete = async (friendId: string) => {
+    const handleContactDelete = async (contactId: string) => {
         if (!userId) {
             console.error('No user ID provided');
             return;
         }
     
-        const updatedUser = await userService.deleteFriend(userId, friendId);
+        const updatedUser = await userService.deleteContact(userId, contactId);
     
         if (updatedUser) {
             setUserData(updatedUser);
         } else {
-            console.error('Failed to delete friend or update user data');
+            console.error('Failed to delete contact or update user data');
         }
     };
 
@@ -102,15 +102,15 @@ const UserDisplay: React.FC = () => {
                         <ModalContent maxW="320px">
                             <ModalCloseButton />
                             <ModalBody>
-                                <FriendForm onSubmit={handleFriendAdd} />
+                                <ContactForm onSubmit={handleContactAdd} />
                             </ModalBody>
                         </ModalContent>
                     </Modal>
                 </Flex>
-                <FriendList 
-                    friends={userData.friends} 
-                    onEditFriend={handleFriendSubmit}
-                    onDeleteFriend={handleFriendDelete}
+                <ContactList 
+                    contacts={userData.contacts} 
+                    onEditContact={handleContactSubmit}
+                    onDeleteContact={handleContactDelete}
                 />
                 <TimeSettings 
                     initialTime={userData.emailSendTime}

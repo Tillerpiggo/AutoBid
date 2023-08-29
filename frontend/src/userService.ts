@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { User, Friend } from './interfaces';
+import { User, Contact } from './interfaces';
 
 const API_BASE_URL = 'http://localhost:3000';
 
@@ -19,45 +19,46 @@ export const userService = {
         }
     },
 
-    updateFriend: async (userId: string, editedFriend: Friend): Promise<User | null> => {
+    updateContact: async (userId: string, editedContact: Contact): Promise<User | null> => {
         try {
-            const response = await axios.put(`${API_BASE_URL}/users/${userId}/friends/${editedFriend.id}`, {
-                name: editedFriend.name,
-                birthday: editedFriend.birthday
+            const response = await axios.put(`${API_BASE_URL}/users/${userId}/friends/${editedContact.id}`, {
+                name: editedContact.name,
+                birthday: editedContact.birthday
             });
 
-            if (response.data && response.data.message === 'Friend updated') {
-                console.log('Friend updated successfully');
+            if (response.data && response.data.message === 'contact updated') {
+                console.log('contact updated successfully');
                 return response.data.user;
             } else {
-                console.error('Failed to update friend');
+                console.error('Failed to update contact');
                 return null;
             }
         } catch (error) {
-            console.error('Failed to update friend', error);
+            console.error('Failed to update contact', error);
             return null;
         }
     },
 
-    addFriend: async (userId: string, newFriend: Omit<Friend, 'id'>): Promise<User | null> => {
+    addContact: async (userId: string, newContact: Omit<Contact, 'id'>): Promise<User | null> => {
+        console.log("trying to add contact");
         try {
             const response = await fetch(`${API_BASE_URL}/users/${userId}/friends`, {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newFriend),
+                body: JSON.stringify(newContact),
             });
 
             if (!response.ok) {
-                console.error('Failed to add friend');
+                console.error('Failed to add contact');
                 return null;
             }
 
             const updatedUser = await response.json();
             return updatedUser.user;
         } catch (error) {
-            console.error('Failed to add friend', error);
+            console.error('Failed to add contact', error);
             return null;
         }
     },
@@ -82,19 +83,19 @@ export const userService = {
         }
     },
 
-    deleteFriend: async (userId: string, friendId: string): Promise<User | null> => {
+    deleteContact: async (userId: string, contactId: string): Promise<User | null> => {
         try {
-            const response = await axios.delete(`${API_BASE_URL}/users/${userId}/friends/${friendId}`);
+            const response = await axios.delete(`${API_BASE_URL}/users/${userId}/friends/${contactId}`);
 
-            if (response.data && response.data.message === 'Friend deleted') {
-                console.log('Friend deleted successfully');
+            if (response.data && response.data.message === 'Contact deleted') {
+                console.log('Contact deleted successfully');
                 return response.data.user;
             } else {
-                console.error('Failed to delete friend');
+                console.error('Failed to delete contact');
                 return null;
             }
         } catch (error) {
-            console.error('Failed to delete friend', error);
+            console.error('Failed to delete contact', error);
             return null;
         }
     },

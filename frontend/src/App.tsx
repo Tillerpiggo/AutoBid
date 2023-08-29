@@ -16,7 +16,7 @@ const App: React.FC = () => {
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<LandingPage />} />
-                        <Route path="/user/:userId" element={<SidebarWithHeader />} />
+                        <Route path="/user/:userId/*" element={<SidebarWithHeader />} />
                     </Routes>
                 </BrowserRouter>
             </div>

@@ -1,25 +1,25 @@
-import { Friend } from './interfaces';
+import { Contact } from './interfaces';
 import ContactOptions from './ContactOptions';
 import { 
     Box, Stack, Flex, Text, useColorModeValue, Avatar, useDisclosure, 
     Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton 
 } from '@chakra-ui/react';
 import React from 'react';
-import FriendForm from './FriendForm';
-import FriendDetail from './FriendDetail';
+import ContactForm from './ContactForm';
+import ContactDetail from './ContactDetail';
 
-interface FriendItemProps {
-    friend: Friend;
-    onEdit: (friend: Friend) => Promise<void>;
+interface ContactItemProps {
+    contact: Contact;
+    onEdit: (contact: Contact) => Promise<void>;
     onDelete: (id: string) => Promise<void>;
 }
 
-const FriendItem: React.FC<FriendItemProps> = ({ friend, onEdit, onDelete }) => {
+const ContactItem: React.FC<ContactItemProps> = ({ contact, onEdit, onDelete }) => {
     const detailDisclosure = useDisclosure();
     const editDisclosure = useDisclosure();
 
     const handleDelete = () => {
-        onDelete(friend.id);
+        onDelete(contact.id);
     };
 
     const handleEdit = () => {
@@ -52,8 +52,8 @@ const FriendItem: React.FC<FriendItemProps> = ({ friend, onEdit, onDelete }) => 
                 <Stack direction="row" spacing={4} align="center">
                     <Avatar src="https://example.com/path-to-profile-pic.jpg" />
                     <Stack direction="column" spacing={0} fontSize="sm">
-                        <Text fontWeight={600}>{friend.name}</Text>
-                        <Text color="gray.500">{new Date(friend.birthday).toDateString()}</Text>
+                        <Text fontWeight={600}>{contact.name}</Text>
+                        <Text color="gray.500">{new Date(contact.birthday).toDateString()}</Text>
                     </Stack>
                 </Stack>
                 <ContactOptions onEdit={handleEditFromContactOptions} onDelete={handleDelete} />
@@ -62,7 +62,7 @@ const FriendItem: React.FC<FriendItemProps> = ({ friend, onEdit, onDelete }) => 
                 <ModalOverlay />
                 <ModalContent maxW="320px">
                     <ModalBody>
-                        <FriendDetail friend={friend} onEdit={handleEdit} onDelete={handleDelete} />
+                        <ContactDetail contact={contact} onEdit={handleEdit} onDelete={handleDelete} />
                     </ModalBody>
                 </ModalContent>
             </Modal>
@@ -71,7 +71,7 @@ const FriendItem: React.FC<FriendItemProps> = ({ friend, onEdit, onDelete }) => 
                 <ModalContent maxW="320px">
                     <ModalCloseButton />
                     <ModalBody>
-                        <FriendForm friend={friend} onSubmit={onEdit} />
+                        <ContactForm contact={contact} onSubmit={onEdit} />
                     </ModalBody>
                 </ModalContent>
             </Modal>
@@ -79,4 +79,4 @@ const FriendItem: React.FC<FriendItemProps> = ({ friend, onEdit, onDelete }) => 
     );
 }
 
-export default FriendItem;
+export default ContactItem;

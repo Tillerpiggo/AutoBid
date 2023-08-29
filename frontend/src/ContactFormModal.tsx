@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
-import FriendForm, { FriendFormProps } from './FriendForm';
-import { Friend } from './interfaces';
+import ContactForm, { ContactFormProps } from './ContactForm';
+import { Contact } from './interfaces';
 import ActionButton from './ActionButton';
 import GrayButton from './GrayButton';
 import { Center } from '@chakra-ui/react';
 
-const FriendFormModal: React.FC<FriendFormProps> = (props) => {
+const ContactFormModal: React.FC<ContactFormProps> = (props) => {
 
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     const handleOpenModal = () => setIsModalVisible(true);
     const handleCloseModal = () => setIsModalVisible(false);
 
-    const handleSubmitAndCloseModal = async (friend: Friend) => {
-        await props.onSubmit(friend);
+    const handleSubmitAndCloseModal = async (contact: Contact) => {
+        await props.onSubmit(contact);
         handleCloseModal();
     };
 
     return (
         <>
-            {props.friend ? (
+            {props.contact ? (
                 <GrayButton
                 label="Edit"
                 handleClick={handleOpenModal}
@@ -37,7 +37,7 @@ const FriendFormModal: React.FC<FriendFormProps> = (props) => {
                     <Center onClick={e => e.stopPropagation()} 
                         style={{ backgroundColor: '#fff', padding: '1em', width: '80%', maxHeight: '80%', overflow: 'auto' }}>
                         <button onClick={handleCloseModal}>Close</button>
-                        <FriendForm {...props} onSubmit={handleSubmitAndCloseModal} />
+                        <ContactForm {...props} onSubmit={handleSubmitAndCloseModal} />
                     </Center>
                 </div>
             )}
@@ -45,4 +45,4 @@ const FriendFormModal: React.FC<FriendFormProps> = (props) => {
     );
 };
 
-export default FriendFormModal;
+export default ContactFormModal;

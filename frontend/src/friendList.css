@@ -1,8 +1,0 @@
-.friend-enter {
-    opacity: 0;
-}
-  
-.friend-enter-active {
-    opacity: 1;
-    transition: opacity 500ms;
-}
