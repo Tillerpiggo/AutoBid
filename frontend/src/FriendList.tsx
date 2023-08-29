@@ -19,20 +19,21 @@ const FriendList: React.FC<FriendListProps> = ({ friends, onEditFriend, onDelete
     };
 
     return (
-            <Box
-                width="full"
-                borderRadius="2xl">
-                <VStack spacing={2} alignItems="stretch" justifyContent="flex-start">
-                    {friends && friends.map((friend) => (
-                    <FriendItem
-                        key={friend.id}
-                        friend={friend}
-                        onEdit={handleFriendEdit}
-                        onDelete={handleFriendDelete}
-                    />
-                    ))}
-                </VStack>
-            </Box>
+        <Box
+            width="full"
+            borderRadius="2xl">
+            <VStack spacing={2} alignItems="stretch" justifyContent="flex-start">
+                {friends && friends.map((friend, index) => (
+                    <Box zIndex={friends.length - index} key={friend.id}>
+                        <FriendItem
+                            friend={friend}
+                            onEdit={handleFriendEdit}
+                            onDelete={handleFriendDelete}
+                        />
+                    </Box>
+                ))}
+            </VStack>
+        </Box>
     );
 }
 

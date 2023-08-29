@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { User, Friend } from './interfaces';
 import FriendList from './FriendList';
-import FriendFormModal from './FriendFormModal';
+import FriendForm from './FriendForm';
 import { useParams } from 'react-router-dom';
 import { userService } from './userService';
 import TimeSettings from './TimeSettings';
-import { Box, VStack, Center, Heading, Text, Flex } from "@chakra-ui/react";
+import {
+    Box, VStack, Heading, Flex, Button, useDisclosure, Modal, 
+    ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter
+} from '@chakra-ui/react';
 
 const UserDisplay: React.FC = () => {
     const { userId } = useParams<{ userId: string }>();
     const [userData, setUserData] = useState<User | null>(null);
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -26,6 +30,7 @@ const UserDisplay: React.FC = () => {
 
     const handleFriendAdd = async (friend: Friend) => {
         await handleFriendSubmit(friend);
+        onClose();
     };
 
     const handleFriendSubmit = async (friend: Friend) => {
@@ -91,7 +96,16 @@ const UserDisplay: React.FC = () => {
             <VStack spacing={8} align="stretch">
                 <Flex justifyContent="space-between" width="100%">
                     <Heading as="h2">Contacts</Heading>
-                    <FriendFormModal onSubmit={handleFriendAdd} onDelete={handleFriendDelete} />
+                    <Button onClick={onOpen}>Add Contact</Button>
+                    <Modal isOpen={isOpen} onClose={onClose}>
+                        <ModalOverlay />
+                        <ModalContent maxW="320px">
+                            <ModalCloseButton />
+                            <ModalBody>
+                                <FriendForm onSubmit={handleFriendAdd} />
+                            </ModalBody>
+                        </ModalContent>
+                    </Modal>
                 </Flex>
                 <FriendList 
                     friends={userData.friends} 
