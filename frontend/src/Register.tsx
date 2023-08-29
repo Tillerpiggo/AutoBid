@@ -30,16 +30,19 @@ const Register: React.FC = () => {
     };
 
     return (
-        <Stack spacing={4} direction={{ base: 'column', md: 'row' }} w={'full'}>
+        <Stack spacing={4} direction={{ base: 'row', md: 'column' }} w={'full'}>
             <Input
                 size="lg" // adjust the size
+                height="60px"
                 type={'email'}
-                placeholder={'john@doe.net'}
+                placeholder={'Enter email'}
                 onChange={(e) => setEmail(e.target.value)}
                 color={useColorModeValue('gray.800', 'gray.200')} // gray color
                 bg={useColorModeValue('gray.100', 'gray.600')}
                 rounded={'full'}
                 border={0}
+                px="5"
+                width="500px"
                 _focus={{
                     bg: 'white',
                     outline: 'none',
@@ -49,6 +52,7 @@ const Register: React.FC = () => {
             />
             <Button
                 size="lg" // adjust the size
+                height="60px"
                 bg={'red.400'}
                 rounded={'full'}
                 color={'white'}
@@ -56,7 +60,7 @@ const Register: React.FC = () => {
                 _hover={{ bg: 'red.500' }}
                 _focus={{ bg: 'red.500' }}
                 onClick={handleSubmit}>
-                Sign up
+                Start adding contacts
             </Button>
         </Stack>
     );

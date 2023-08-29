@@ -5,6 +5,7 @@ import FriendFormModal from './FriendFormModal';
 import { useParams } from 'react-router-dom';
 import { userService } from './userService';
 import TimeSettings from './TimeSettings';
+import { Box, VStack, Center, Heading, Text, Flex } from "@chakra-ui/react";
 
 const UserDisplay: React.FC = () => {
     const { userId } = useParams<{ userId: string }>();
@@ -86,23 +87,25 @@ const UserDisplay: React.FC = () => {
     }
 
     return (
-        <div>
-            <h1>User Display</h1>
-            <p>Email: {userData.email}</p>
-            <h2>Friends</h2>
-            <FriendList 
-                friends={userData.friends} 
-                onEditFriend={handleFriendSubmit}
-                onDeleteFriend={handleFriendDelete}
-            />
-            <FriendFormModal onSubmit={handleFriendAdd} onDelete={handleFriendDelete} /> {/* Add FriendFormModal */}
-            <TimeSettings 
-                initialTime={userData.emailSendTime}
-                initialTimezone={userData.timezone}
-                onTimeChange={handleTimeChange}
-                onTimezoneChange={handleTimezoneChange}
-            />
-        </div>
+        <Box minHeight="100vh" padding="5">
+            <VStack spacing={8} align="stretch">
+                <Flex justifyContent="space-between" width="100%">
+                    <Heading as="h2">Contacts</Heading>
+                    <FriendFormModal onSubmit={handleFriendAdd} onDelete={handleFriendDelete} />
+                </Flex>
+                <FriendList 
+                    friends={userData.friends} 
+                    onEditFriend={handleFriendSubmit}
+                    onDeleteFriend={handleFriendDelete}
+                />
+                <TimeSettings 
+                    initialTime={userData.emailSendTime}
+                    initialTimezone={userData.timezone}
+                    onTimeChange={handleTimeChange}
+                    onTimezoneChange={handleTimezoneChange}
+                />
+            </VStack>
+        </Box>
     );
 }
 

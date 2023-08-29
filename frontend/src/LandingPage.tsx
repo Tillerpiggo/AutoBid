@@ -12,27 +12,29 @@ const LandingPage: React.FC = () => {
                 <Stack
                     as={Box}
                     textAlign={'center'}
-                    spacing={{ base: 8, md: 14 }}
+                    spacing={{ base: 8, md: 16 }}
                     py={{ base: 20, md: 36 }}>
-                    <Heading
-                        fontWeight={700}
-                        fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
-                        lineHeight={'110%'}>
-                        Thoughtful gifts <br />
-                        <Text as={'span'} color={'red.400'}>
-                            made easy
+                    <Stack spacing={{ md: 12 }}>
+                        <Heading
+                            fontWeight={700}
+                            fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
+                            lineHeight={'110%'}>
+                            Thoughtful gifts <br />
+                            <Text as={'span'} color={'red.400'}>
+                                made easy
+                            </Text>
+                        </Heading>
+                        <Text fontSize={'md'} color={'gray.500'}>
+                            Emailed gift suggestions, right when you need them.
                         </Text>
-                    </Heading>
-                    <Text fontSize={'xl'} color={'gray.500'}>
-                        Fantastic gift suggestions, right on time.
-                    </Text>
+                    </Stack>
                     <Stack
                         direction={'column'}
                         spacing={3}
                         align={'center'}
                         alignSelf={'center'}
                         position={'relative'}>
-                    <Register />
+                        <Register />
                     </Stack>
                 </Stack>
             </Container>

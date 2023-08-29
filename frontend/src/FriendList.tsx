@@ -1,6 +1,7 @@
 import { Friend } from './interfaces';
 import FriendItem from './FriendItem';
 import React from 'react';
+import { VStack, Box, Center } from '@chakra-ui/react';
 
 interface FriendListProps {
     friends: Friend[];
@@ -18,17 +19,21 @@ const FriendList: React.FC<FriendListProps> = ({ friends, onEditFriend, onDelete
     };
 
     return (
-        <div>
-            {friends && friends.map((friend) => (
-                <FriendItem
-                    key={friend.id}
-                    friend={friend}
-                    onEdit={handleFriendEdit}
-                    onDelete={handleFriendDelete}
-                />
-            ))}
-        </div>
-    )
+            <Box
+                width="full"
+                borderRadius="2xl">
+                <VStack spacing={2} alignItems="stretch" justifyContent="flex-start">
+                    {friends && friends.map((friend) => (
+                    <FriendItem
+                        key={friend.id}
+                        friend={friend}
+                        onEdit={handleFriendEdit}
+                        onDelete={handleFriendDelete}
+                    />
+                    ))}
+                </VStack>
+            </Box>
+    );
 }
 
 export default FriendList;
