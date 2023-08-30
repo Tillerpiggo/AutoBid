@@ -4,8 +4,8 @@ import DatabaseManager from '../DatabaseManager';
 export const ContactController = (databaseManager: DatabaseManager) => {
     const addContact = async (req: Request, res: Response) => {
         const { userId } = req.params;
-        const { name, birthday } = req.body;
-        const user = await databaseManager.addContactToUser(userId, name, birthday);
+        const { name, birthdayDay, birthdayMonth } = req.body;
+        const user = await databaseManager.addContactToUser(userId, name, birthdayDay, birthdayMonth);
         if (!user) {
             return res.status(404).send({ error: 'User not found' });
         }
@@ -14,8 +14,8 @@ export const ContactController = (databaseManager: DatabaseManager) => {
 
     const updateContact = async (req: Request, res: Response) => {
         const { userId, contactId } = req.params;
-        const { name, birthday } = req.body;
-            const user = await databaseManager.updateContact(userId, contactId, name, birthday);
+        const { name, birthdayDay, birthdayMonth } = req.body;
+        const user = await databaseManager.updateContact(userId, contactId, name, birthdayDay, birthdayMonth);
         if (!user) {
             return res.status(404).send({ error: 'User not found' });
         }

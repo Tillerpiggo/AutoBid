@@ -36,7 +36,7 @@ const TimeSettings: React.FC<TimeSettingsProps> = ({ onTimeChange, onTimezoneCha
             <Heading as="h2" mb={6}>Time Settings</Heading>
             <VStack align="start" spacing={8}>
                 <FormControl id="email-time">
-                    <FormLabel fontSize="lg">Email time:</FormLabel>
+                    <FormLabel fontSize="lg">Email Time:</FormLabel>
                     <TimePicker 
                         format='HH:mm'
                         value={time}
@@ -45,7 +45,7 @@ const TimeSettings: React.FC<TimeSettingsProps> = ({ onTimeChange, onTimezoneCha
                     />
                 </FormControl>
                 <FormControl id="timezone">
-                    <FormLabel fontSize="lg">Timezone:</FormLabel>
+                    <FormLabel fontSize="lg">Time Zona</FormLabel>
                     <Select 
                         placeholder="Select timezone" 
                         value={timezone} 

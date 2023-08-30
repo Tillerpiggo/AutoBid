@@ -1,15 +1,17 @@
 import { IUser } from './models/User';
 import schedule from 'node-schedule';
-import moment from 'moment-timezone';
+import DateManager from './DateManager';
 
 const mailchimpFactory = require("@mailchimp/mailchimp_transactional/src/index.js");
 const mailchimp = mailchimpFactory(process.env.MAILCHIMP_API_KEY);
 
 class EmailManager {
+    private dateManager: DateManager;
     private getUserList: () => Promise<IUser[]>;
 
     constructor(getUserList: () => Promise<IUser[]>) {
         this.getUserList = getUserList;
+        this.dateManager = new DateManager();
     }
 
     private async sendEmail(to: string, subject: string, message: string) {
@@ -28,24 +30,14 @@ class EmailManager {
         }
     }
 
-    private async getEmailsToSendToday(): Promise<{to: string, subject: string, message: string}[] | undefined> {
-        const emailsToSend: {to: string, subject: string, message: string}[] = [];
-    
+    private async getEmailsToSendToday(): Promise<{ to: string, subject: string, message: string }[] | undefined> {
+        const emailsToSend: { to: string, subject: string, message: string }[] = [];
+
         try {
             const users = await this.getUserList();
             for (const user of users) {
-                // Get current date in user's timezone
-                const nowInUserTimezone = moment().tz(user.timezone);
-                console.log(`User's timezone is ${user.timezone}, and the current date/time in their timezone is ${nowInUserTimezone.format()}`);
-    
                 for (const contact of user.contacts) {
-                    // Convert contacts's birthday to user's timezone
-                    let contactBirthdayInUserTimezone = moment.utc(contact.birthday).tz(user.timezone);
-                    // Remove minutes, seconds, and hours so it's just comparing day
-                    contactBirthdayInUserTimezone.year(nowInUserTimezone.year()).month(nowInUserTimezone.month()).date(nowInUserTimezone.date());
-                    console.log(`Contact's birthday is ${contact.birthday}, and in the user's timezone, this is ${contactBirthdayInUserTimezone.format()}`);
-    
-                    if (contactBirthdayInUserTimezone.isSame(nowInUserTimezone, 'day')) {
+                    if (this.dateManager.isToday(contact.birthdayDay, contact.birthdayMonth, user.timezone)) {
                         console.log(`It's ${contact.name}'s birthday today in the user's timezone!`);
                         emailsToSend.push({
                             to: user.email,

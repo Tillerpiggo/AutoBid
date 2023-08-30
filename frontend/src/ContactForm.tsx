@@ -41,6 +41,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ contact, onSubmit }) => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+        event.stopPropagation();
         setIsSubmitting(true);
 
         const newContact: Contact = {

@@ -20,14 +20,14 @@ const userService = {
     },
 
     updateContact: async (userId: string, editedContact: Contact): Promise<User | null> => {
-        return null
         try {
             const response = await axios.put(`${API_BASE_URL}/users/${userId}/contacts/${editedContact.id}`, {
                 name: editedContact.name,
-                birthday: editedContact.birthday
+                birthdayDay: editedContact.birthdayDay,
+                birthdayMonth: editedContact.birthdayMonth
             });
 
-            if (response.data && response.data.message === 'contact updated') {
+            if (response.data) {
                 console.log('contact updated successfully');
                 return response.data.user;
             } else {

@@ -26,9 +26,15 @@ const ContactItem: React.FC<ContactItemProps> = ({ contact, onEdit, onDelete }) 
         onDelete(contact.id);
     };
 
-    const handleEdit = () => {
+    const handleStartEdit = () => {
         editDisclosure.onOpen();
     };
+
+    const handleFinishEdit = async (contact: Contact) => {
+        await onEdit(contact);
+        editDisclosure.onClose();
+        detailDisclosure.onClose();
+    }
 
     const handleEditFromContactOptions = () => {
         editDisclosure.onOpen();
@@ -66,7 +72,7 @@ const ContactItem: React.FC<ContactItemProps> = ({ contact, onEdit, onDelete }) 
                 <ModalOverlay />
                 <ModalContent maxW="320px">
                     <ModalBody>
-                        <ContactDetail contact={contact} onEdit={handleEdit} onDelete={handleDelete} />
+                        <ContactDetail contact={contact} onEdit={handleStartEdit} onDelete={handleDelete} />
                     </ModalBody>
                 </ModalContent>
             </Modal>
@@ -75,7 +81,7 @@ const ContactItem: React.FC<ContactItemProps> = ({ contact, onEdit, onDelete }) 
                 <ModalContent maxW="320px">
                     <ModalCloseButton />
                     <ModalBody>
-                        <ContactForm contact={contact} onSubmit={onEdit} />
+                        <ContactForm contact={contact} onSubmit={handleFinishEdit} />
                     </ModalBody>
                 </ModalContent>
             </Modal>

@@ -1,6 +1,5 @@
 import User, { Contact } from './models/User';
 import mongoose from 'mongoose';
-import moment from 'moment-timezone';
 
 export default class DatabaseManager {
     constructor() {
@@ -25,17 +24,17 @@ export default class DatabaseManager {
         return user;
     }
 
-    async addContactToUser(userId: string, name: string, birthday: string) {
+    async addContactToUser(userId: string, name: string, birthdayDay: number, birthdayMonth: number) {
         const user = await this.getUserById(userId); // Changed to getUserById
     
-        const newContact = new Contact({ name, birthday });
+        const newContact = new Contact({ name, birthdayDay, birthdayMonth });
         user.contacts.push(newContact);
     
         await user.save();
         return user;
     }
 
-    async updateContact(userId: string, contactId: string, name: string, birthday: string) {
+    async updateContact(userId: string, contactId: string, name: string, birthdayDay: number, birthdayMonth: number) {
         console.log(`Updating contact with ID ${contactId} for user with ID ${userId}`);
         
         const user = await User.findById(userId);
@@ -55,12 +54,8 @@ export default class DatabaseManager {
             contact.name = name;
         }
     
-        if (birthday) {
-            console.log(`Updating birthday from ${contact.birthday}`);
-            const newBirthday = moment.tz(birthday, 'YYYY-MM-DD', user.timezone).startOf('day').toDate();
-            console.log(`to ${newBirthday}`);
-            contact.birthday = newBirthday;
-        }
+        contact.birthdayDay = birthdayDay;
+        contact.birthdayMonth = birthdayMonth;
     
         await user.save();
         console.log(`User with ID ${userId} updated successfully`);

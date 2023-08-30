@@ -2,7 +2,8 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IContact extends Document {
     name: string;
-    birthday: Date;
+    birthdayDay: number;
+    birthdayMonth: number;
 }
 
 export interface IUser extends Document {
@@ -16,7 +17,8 @@ export interface IUser extends Document {
 
 const ContactSchema: Schema = new Schema<IContact>({
     name: { type: String, required: true },
-    birthday: { type: Date, required: true }
+    birthdayDay: { type: Number, required: true },
+    birthdayMonth: { type: Number, required: true }
 });
 
 const UserSchema: Schema = new Schema<IUser>({
