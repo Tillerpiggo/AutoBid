@@ -2,6 +2,7 @@ import { Box, Button, Flex, Heading, HStack, Tag, Text, useColorModeValue, Avata
 import React from 'react';
 import ContactOptions from './ContactOptions';
 import { Contact } from './interfaces';
+import DateService from './dateService';
 
 interface ContactDetailProps {
     contact: Contact;
@@ -38,7 +39,7 @@ const ContactDetail: React.FC<ContactDetailProps> = ({ contact, onEdit, onDelete
                 {contact.name}
             </Heading>
             <Text fontWeight={600} color={"gray.500"} mb={4}>
-                {new Date(contact.birthday).toLocaleDateString()}
+                {DateService.getFormattedDate(contact.birthdayDay, contact.birthdayMonth)}
             </Text>
 
             <HStack spacing={4} justify="center" align="center">

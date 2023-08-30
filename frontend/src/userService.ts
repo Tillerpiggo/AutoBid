@@ -20,6 +20,7 @@ const userService = {
     },
 
     updateContact: async (userId: string, editedContact: Contact): Promise<User | null> => {
+        return null
         try {
             const response = await axios.put(`${API_BASE_URL}/users/${userId}/contacts/${editedContact.id}`, {
                 name: editedContact.name,

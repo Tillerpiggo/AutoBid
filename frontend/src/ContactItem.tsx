@@ -7,6 +7,7 @@ import {
 import React from 'react';
 import ContactForm from './ContactForm';
 import ContactDetail from './ContactDetail';
+import DateService from './dateService';
 
 interface ContactItemProps {
     contact: Contact;
@@ -17,6 +18,9 @@ interface ContactItemProps {
 const ContactItem: React.FC<ContactItemProps> = ({ contact, onEdit, onDelete }) => {
     const detailDisclosure = useDisclosure();
     const editDisclosure = useDisclosure();
+
+    // Formatted birthday using DateService
+    const birthday = DateService.getFormattedDate(contact.birthdayDay, contact.birthdayMonth);
 
     const handleDelete = () => {
         onDelete(contact.id);
@@ -53,7 +57,7 @@ const ContactItem: React.FC<ContactItemProps> = ({ contact, onEdit, onDelete }) 
                     <Avatar src="https://example.com/path-to-profile-pic.jpg" />
                     <Stack direction="column" spacing={0} fontSize="sm">
                         <Text fontWeight={600}>{contact.name}</Text>
-                        <Text color="gray.500">{new Date(contact.birthday).toDateString()}</Text>
+                        <Text color="gray.500">{birthday}</Text>
                     </Stack>
                 </Stack>
                 <ContactOptions onEdit={handleEditFromContactOptions} onDelete={handleDelete} />

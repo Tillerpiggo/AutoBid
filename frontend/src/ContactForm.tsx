@@ -10,6 +10,7 @@ import {
     FormLabel,
     Heading,
     useColorModeValue,
+    Select
 } from '@chakra-ui/react'
 
 export interface ContactFormProps {
@@ -18,21 +19,23 @@ export interface ContactFormProps {
 }
 
 const ContactForm: React.FC<ContactFormProps> = ({ contact, onSubmit }) => {
-    const initialBirthday = contact?.birthday ? new Date(contact.birthday).toISOString().slice(0, 10) : "";
     const [name, setName] = useState(contact?.name || "");
-    const [birthday, setBirthday] = useState(initialBirthday);
-    const [initialState, setInitialState] = useState({ name, birthday });
+    const [birthdayDay, setBirthdayDay] = useState(contact?.birthdayDay || 1); // Default day is 1
+    const [birthdayMonth, setBirthdayMonth] = useState(contact?.birthdayMonth || 1); // Default month is 1 (January)
+    const [initialState, setInitialState] = useState({ name, birthdayDay, birthdayMonth });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        setInitialState({ name, birthday });
+        setInitialState({ name, birthdayDay, birthdayMonth });
     }, [contact]);
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         if (event.target.name === 'name') {
             setName(event.target.value);
-        } else if (event.target.name === 'birthday') {
-            setBirthday(event.target.value);
+        } else if (event.target.name === 'birthdayDay') {
+            setBirthdayDay(Number(event.target.value));
+        } else if (event.target.name === 'birthdayMonth') {
+            setBirthdayMonth(Number(event.target.value));
         }
     };
 
@@ -43,15 +46,19 @@ const ContactForm: React.FC<ContactFormProps> = ({ contact, onSubmit }) => {
         const newContact: Contact = {
             id: contact?.id || "", 
             name: name,
-            birthday: new Date(birthday)
+            birthdayDay: birthdayDay,
+            birthdayMonth: birthdayMonth
         };
 
         await onSubmit(newContact);
         setIsSubmitting(false);
     };
 
-    const isAddButtonDisabled = !name || !birthday || isSubmitting;
-    const isUpdateButtonDisabled = (name === initialState.name && birthday === initialState.birthday) || isSubmitting;
+    const isAddButtonDisabled = !name || !birthdayDay || !birthdayMonth || isSubmitting;
+    const isUpdateButtonDisabled = (name === initialState.name && birthdayDay === initialState.birthdayDay && birthdayMonth === initialState.birthdayMonth) || isSubmitting;
+
+    // Array of month names for the dropdown
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     return (
         <Box
@@ -65,9 +72,25 @@ const ContactForm: React.FC<ContactFormProps> = ({ contact, onSubmit }) => {
                 <FormLabel>Name</FormLabel>
                 <Input type="text" name="name" value={name} onChange={handleInputChange} isDisabled={isSubmitting} />
             </FormControl>
-            <FormControl id="birthday" mt={4}>
-                <FormLabel>Birthday</FormLabel>
-                <Input type="date" name="birthday" value={birthday} onChange={handleInputChange} isDisabled={isSubmitting} />
+            <FormControl id="birthdayMonth" mt={4}>
+                <FormLabel>Birthday Month</FormLabel>
+                <Select name="birthdayMonth" value={birthdayMonth} onChange={handleInputChange} isDisabled={isSubmitting}>
+                    {months.map((month, index) => (
+                        <option key={index} value={index + 1}>
+                            {month}
+                        </option>
+                    ))}
+                </Select>
+            </FormControl>
+            <FormControl id="birthdayDay" mt={4}>
+                <FormLabel>Birthday Day</FormLabel>
+                <Select name="birthdayDay" value={birthdayDay} onChange={handleInputChange} isDisabled={isSubmitting}>
+                    {Array.from({length: 31}, (_, i) => i + 1).map((day) => (
+                        <option key={day} value={day}>
+                            {day}
+                        </option>
+                    ))}
+                </Select>
             </FormControl>
             <Stack mt={8} direction={'row'} spacing={4}>
                 <Button

@@ -9,5 +9,6 @@ export interface User {
 export interface Contact {
     id: string;
     name: string;
-    birthday: Date;
+    birthdayDay: number;
+    birthdayMonth: number;
 }
