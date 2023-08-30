@@ -3,7 +3,7 @@ import { User, Contact } from './interfaces';
 
 const API_BASE_URL = 'http://localhost:3000';
 
-export const userService = {
+const userService = {
     getUser: async (userId: string): Promise<User | null> => {
         try {
             const response = await fetch(`${API_BASE_URL}/users/${userId}`);
@@ -100,3 +100,5 @@ export const userService = {
         }
     },
 };
+
+export default userService;

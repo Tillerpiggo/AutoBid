@@ -24,46 +24,47 @@ const Register: React.FC = () => {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            navigate(`/user/${data.user.id}`, { state: { user: data } })
+            navigate(`/user/${data.user.id}/contacts`, { state: { user: data } })
         })
         .catch(error => console.error('Error:', error));
     };
 
     return (
-        <Stack spacing={4} direction={{ base: 'row', md: 'column' }} w={'full'}>
-            <Input
-                size="lg" // adjust the size
-                height="60px"
-                type={'email'}
-                placeholder={'Enter email'}
-                onChange={(e) => setEmail(e.target.value)}
-                color={useColorModeValue('gray.800', 'gray.200')} // gray color
-                bg={useColorModeValue('gray.100', 'gray.600')}
-                rounded={'full'}
-                border={0}
-                px="5"
-                width="500px"
-                _focus={{
-                    bg: 'white',
-                    outline: 'none',
-                    borderColor: 'red.400',
-                    boxShadow: '0 0 0 3px rgba(255, 102, 102, 0.6)',
-                }}
-            />
-            <Button
-                size="lg" // adjust the size
-                height="60px"
-                bg={'red.400'}
-                rounded={'full'}
-                color={'white'}
-                flex={'1 0 auto'}
-                _hover={{ bg: 'red.500' }}
-                _focus={{ bg: 'red.500' }}
-                onClick={handleSubmit}>
-                Start adding contacts
-            </Button>
-        </Stack>
+        <form onSubmit={handleSubmit}>
+            <Stack spacing={4} direction={{ base: 'row', md: 'column' }} w={'full'}>
+                <Input
+                    size="lg"
+                    height="60px"
+                    type={'email'}
+                    placeholder={'Enter email'}
+                    onChange={(e) => setEmail(e.target.value)}
+                    color={useColorModeValue('gray.800', 'gray.200')}
+                    bg={useColorModeValue('gray.100', 'gray.600')}
+                    rounded={'full'}
+                    border={0}
+                    px="5"
+                    width="500px"
+                    _focus={{
+                        bg: 'white',
+                        outline: 'none',
+                        borderColor: 'blue.400',
+                        boxShadow: '0 0 0 3px rgba(66, 153, 225, 0.6)',
+                    }}
+                />
+                <Button
+                    size="lg"
+                    height="60px"
+                    bg={'blue.400'}
+                    rounded={'full'}
+                    color={'white'}
+                    flex={'1 0 auto'}
+                    _hover={{ bg: 'blue.500' }}
+                    _focus={{ bg: 'blue.500' }}
+                    type="submit">
+                    Start adding contacts
+                </Button>
+            </Stack>
+        </form>
     );
 }
-
 export default Register;

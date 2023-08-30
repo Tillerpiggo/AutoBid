@@ -77,13 +77,13 @@ const ContactForm: React.FC<ContactFormProps> = ({ contact, onSubmit }) => {
                     type="submit"
                     onClick={handleSubmit}
                     isDisabled={contact ? isUpdateButtonDisabled : isAddButtonDisabled}
-                    bg={'red.400'}
+                    bg={'blue.400'}
                     color={'white'}
                     _hover={{
-                        bg: 'red.500',
+                        bg: 'blue.500',
                     }}
                     _focus={{
-                        bg: 'red.500',
+                        bg: 'blue.500',
                     }}>
                     {contact ? "Update" : "Add"}
                 </Button>

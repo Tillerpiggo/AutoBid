@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Register from './Register';
-import { Box, Center, Container, Heading, Stack, Text, Button, useColorModeValue, Image, Flex, Avatar } from '@chakra-ui/react';
+import { Box, Container, Heading, Stack, Text, Image } from '@chakra-ui/react';
 
 const LandingPage: React.FC = () => {
     const bgColor = 'white';
@@ -20,7 +20,7 @@ const LandingPage: React.FC = () => {
                             fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
                             lineHeight={'110%'}>
                             Thoughtful gifts <br />
-                            <Text as={'span'} color={'red.400'}>
+                            <Text as={'span'} color={'blue.400'}>
                                 made easy
                             </Text>
                         </Heading>

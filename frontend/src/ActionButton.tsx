@@ -12,17 +12,17 @@ const CustomButton: React.FC<CustomButtonProps> = ({ label, handleClick, ...prop
         px={4}
         fontSize={'sm'}
         rounded={'md'}
-        bg={'red.400'}
+        bg={'blue.400'}
         color={'white'}
         onClick={handleClick}
         // boxShadow={
         //   '0px 1px 25px -5px rgb(255 99 71 / 48%), 0 10px 10px -5px rgb(255 99 71 / 43%)'
         // }
         _hover={{
-          bg: 'red.500',
+          bg: 'blue.500',
         }}
         _focus={{
-          bg: 'red.500',
+          bg: 'blue.500',
         }}
         {...props}>
         {label}

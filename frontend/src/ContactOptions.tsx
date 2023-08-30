@@ -25,6 +25,16 @@ const ContactOptions: React.FC<ContactOptionsProps> = ({ onEdit, onDelete }) => 
         event.stopPropagation();
     };
 
+    const handleEditClick = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        onEdit();
+    };
+
+    const handleDeleteClick = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        onDelete();
+    };
+
     return (
         <Flex justifyContent="center">
             <Popover placement="bottom" isLazy>
@@ -48,7 +58,7 @@ const ContactOptions: React.FC<ContactOptionsProps> = ({ onEdit, onDelete }) => 
                                 justifyContent="space-between"
                                 fontWeight="normal"
                                 fontSize="sm"
-                                onClick={onEdit}
+                                onClick={handleEditClick}
                             >
                                 Edit Contact
                             </Button>
@@ -60,7 +70,7 @@ const ContactOptions: React.FC<ContactOptionsProps> = ({ onEdit, onDelete }) => 
                                 fontWeight="normal"
                                 colorScheme="red"
                                 fontSize="sm"
-                                onClick={onDelete}
+                                onClick={handleDeleteClick}
                             >
                                 Delete Contact
                             </Button>

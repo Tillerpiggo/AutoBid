@@ -4,8 +4,8 @@ import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import moment from 'moment-timezone';
+import { Box, Heading, FormControl, FormLabel, Select, VStack, useColorModeValue } from "@chakra-ui/react";
 
-// Load the utc and timezone plugins for dayjs
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -32,27 +32,36 @@ const TimeSettings: React.FC<TimeSettingsProps> = ({ onTimeChange, onTimezoneCha
     };
 
     return (
-        <div>
-            <h2>Time Settings</h2>
-            <label>
-                Email time:
-                <TimePicker 
-                    format='HH:mm'
-                    value={time}
-                    onChange={handleTimeChange}
-                />
-            </label>
-            <label>
-                Timezone:
-                <select value={timezone} onChange={handleTimezoneChange}>
-                    {moment.tz.names().map((zone, index) => (
-                        <option key={index} value={zone}>
-                            {zone}
-                        </option>
-                    ))}
-                </select>
-            </label>
-        </div>
+        <Box minHeight="100vh" p={8} bg="white">
+            <Heading as="h2" mb={6}>Time Settings</Heading>
+            <VStack align="start" spacing={8}>
+                <FormControl id="email-time">
+                    <FormLabel fontSize="lg">Email time:</FormLabel>
+                    <TimePicker 
+                        format='HH:mm'
+                        value={time}
+                        onChange={handleTimeChange}
+                        style={{ width: '100%', height: '40px', padding: '10px' }}
+                    />
+                </FormControl>
+                <FormControl id="timezone">
+                    <FormLabel fontSize="lg">Timezone:</FormLabel>
+                    <Select 
+                        placeholder="Select timezone" 
+                        value={timezone} 
+                        onChange={handleTimezoneChange}
+                        size="lg"
+                        bg="white"
+                    >
+                        {moment.tz.names().map((zone, index) => (
+                            <option key={index} value={zone}>
+                                {zone}
+                            </option>
+                        ))}
+                    </Select>
+                </FormControl>
+            </VStack>
+        </Box>
     );
 };
 

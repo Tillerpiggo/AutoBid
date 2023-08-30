@@ -65,16 +65,16 @@ const ContactDetail: React.FC<ContactDetailProps> = ({ contact, onEdit, onDelete
                 w={"full"}
                 fontSize={'sm'}
                 rounded={'full'}
-                bg={'red.400'}
+                bg={'blue.400'}
                 color={'white'}
                 boxShadow={
-                  '0px 1px 25px -5px rgb(225 0 0 / 48%), 0 10px 10px -5px rgb(225 0 0 / 43%)'
+                    '0px 1px 25px -5px rgba(16, 112, 202, 0.48), 0 10px 10px -5px rgba(16, 112, 202, 0.43)'
                 }
                 _hover={{
-                  bg: 'red.500',
+                    bg: 'blue.500',
                 }}
                 _focus={{
-                  bg: 'red.500',
+                    bg: 'blue.500',
                 }}
             >
                 Personalize Suggestions

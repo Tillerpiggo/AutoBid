@@ -3,17 +3,20 @@ import { User, Contact } from './interfaces';
 import ContactList from './ContactList';
 import ContactForm from './ContactForm';
 import { useParams } from 'react-router-dom';
-import { userService } from './userService';
+import userService from './userService';
 import TimeSettings from './TimeSettings';
+import { FaPlus } from 'react-icons/fa';
 import {
-    Box, VStack, Heading, Flex, Button, useDisclosure, Modal, 
-    ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter
+    Box, VStack, Heading, Flex, Button, useDisclosure, Modal, Text,
+    ModalOverlay, ModalContent, useMediaQuery, ModalCloseButton, ModalBody, Icon
 } from '@chakra-ui/react';
 
 const UserDisplay: React.FC = () => {
     const { userId } = useParams<{ userId: string }>();
     const [userData, setUserData] = useState<User | null>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const [isSmallScreen] = useMediaQuery("(max-width: 600px)");
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -67,26 +70,6 @@ const UserDisplay: React.FC = () => {
         }
     };
 
-    const handleTimeChange = async (newTime: string) => {
-        if (!userId || !userData) {
-            console.error('No user ID provided or user data not loaded');
-            return;
-        }
-        const updatedUser = await userService.updateUser(userId, userData.timezone, newTime);
-        setUserData(updatedUser);
-        console.log('New time:', newTime);
-    }
-
-    const handleTimezoneChange = async (newTimezone: string) => {
-        if (!userId || !userData) {
-            console.error('No user ID provided or user data not loaded');
-            return;
-        }
-        const updatedUser = await userService.updateUser(userId, newTimezone, userData.emailSendTime);
-        setUserData(updatedUser);
-        console.log('New timezone:', newTimezone);
-    }
-
     if (!userData) {
         return <div>Loading...</div>;
     }
@@ -94,30 +77,27 @@ const UserDisplay: React.FC = () => {
     return (
         <Box minHeight="100vh" padding="5">
             <VStack spacing={8} align="stretch">
-                <Flex justifyContent="space-between" width="100%">
+                <Flex justifyContent="space-between" width="100%" align="center">
                     <Heading as="h2">Contacts</Heading>
-                    <Button onClick={onOpen}>Add Contact</Button>
-                    <Modal isOpen={isOpen} onClose={onClose}>
-                        <ModalOverlay />
-                        <ModalContent maxW="320px">
-                            <ModalCloseButton />
-                            <ModalBody>
-                                <ContactForm onSubmit={handleContactAdd} />
-                            </ModalBody>
-                        </ModalContent>
-                    </Modal>
+                    <Button colorScheme="blue" onClick={onOpen} size="md" p={2}>
+                        <Icon as={FaPlus} />
+                        {!isSmallScreen && <Text ml={2}>Add Contact</Text>}
+                    </Button>
                 </Flex>
                 <ContactList 
                     contacts={userData.contacts} 
                     onEditContact={handleContactSubmit}
                     onDeleteContact={handleContactDelete}
                 />
-                <TimeSettings 
-                    initialTime={userData.emailSendTime}
-                    initialTimezone={userData.timezone}
-                    onTimeChange={handleTimeChange}
-                    onTimezoneChange={handleTimezoneChange}
-                />
+                <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent maxW="320px">
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <ContactForm onSubmit={handleContactAdd} />
+                        </ModalBody>
+                    </ModalContent>
+                </Modal>
             </VStack>
         </Box>
     );
