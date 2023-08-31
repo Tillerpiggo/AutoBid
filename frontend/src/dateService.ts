@@ -1,5 +1,8 @@
+import ContactDetail from "./ContactDetail";
+import { Contact } from "./interfaces";
+
 class DateService {
-    private static months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    private static months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber"];
   
     private static getDaySuffix(day: number) {
         if (day % 10 === 1 && day !== 11) {
@@ -15,6 +18,10 @@ class DateService {
 
     static getFormattedDate(day: number, month: number) {
         return `${this.months[month - 1]} ${day}${this.getDaySuffix(day)}`;
+    }
+
+    static getFormattedBirthday(contact: Contact) {
+        return this.getFormattedDate(contact.birthdayDay, contact.birthdayMonth);
     }
 }
 

@@ -24,7 +24,8 @@ const userService = {
             const response = await axios.put(`${API_BASE_URL}/users/${userId}/contacts/${editedContact.id}`, {
                 name: editedContact.name,
                 birthdayDay: editedContact.birthdayDay,
-                birthdayMonth: editedContact.birthdayMonth
+                birthdayMonth: editedContact.birthdayMonth,
+                persona: editedContact.persona
             });
 
             if (response.data) {

@@ -6,10 +6,10 @@ export const UserController = (databaseManager: DatabaseManager) => {
         const { email, timezone } = req.body;
         const existingUser = await databaseManager.getUserByEmail(email.toLowerCase());
         if (existingUser) {
-            return res.send({ user: existingUser });
+            return res.send({ message: "existing user", user: existingUser });
         }
         const user = await databaseManager.createUser(email.toLowerCase(), timezone);
-        res.send({ user });
+        res.send({ message: "new user", user });
     };
 
     const getUserById = async (req: Request, res: Response) => {

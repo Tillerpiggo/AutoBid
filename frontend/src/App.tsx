@@ -1,8 +1,6 @@
 import React from 'react';
-import Register from './Register';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
-import UserDisplay from './UserDisplay';
+import CongratulationsPage from './CongratulationsPage';
 import SidebarWithHeader from './SidebarWithHeader';
 
 import LandingPage from './LandingPage';
@@ -16,6 +14,7 @@ const App: React.FC = () => {
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<LandingPage />} />
+                        <Route path="/user/:userId/congrats" element={<CongratulationsPage />} />
                         <Route path="/user/:userId/*" element={<SidebarWithHeader />} />
                     </Routes>
                 </BrowserRouter>

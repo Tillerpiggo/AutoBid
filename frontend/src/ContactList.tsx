@@ -2,6 +2,7 @@ import { Contact } from './interfaces';
 import ContactItem from './ContactItem';
 import ContactDetail from './ContactDetail';
 import ContactForm from './ContactForm';
+import PersonaForm from './PersonaForm';
 import React, { useState } from 'react';
 import { VStack, Box, Modal, ModalOverlay, ModalContent, ModalBody, useDisclosure } from '@chakra-ui/react';
 
@@ -9,13 +10,16 @@ import { VStack, Box, Modal, ModalOverlay, ModalContent, ModalBody, useDisclosur
 interface ContactListProps {
     contacts: Contact[];
     onEditContact: (contact: Contact) => Promise<void>;
+    onPersonalizeContact: (contact: Contact) => Promise<void>;
     onDeleteContact: (id: string) => Promise<void>;
 }
 
-const ContactList: React.FC<ContactListProps> = ({ contacts, onEditContact, onDeleteContact }) => {
+const ContactList: React.FC<ContactListProps> = ({ contacts, onEditContact, onPersonalizeContact, onDeleteContact }) => {
     const [selectedContact, setSelectedContact] = useState<Contact | undefined>(undefined);
+
     const editDisclosure = useDisclosure();
     const detailDisclosure = useDisclosure();
+    const personalizeDisclosure = useDisclosure(); // Disclosure for PersonaForm modal
 
     const openEditModal = async (contact: Contact) => {
         setSelectedContact(contact);
@@ -27,17 +31,27 @@ const ContactList: React.FC<ContactListProps> = ({ contacts, onEditContact, onDe
         detailDisclosure.onOpen();
     };
 
-    const doesContactExist = (name: string) => {
-        return contacts.some(contact => contact.name.toLowerCase() === name.toLowerCase());
-    }
+    const openPersonalizeModal = async (contact: Contact) => {
+        setSelectedContact(contact);
+        personalizeDisclosure.onOpen();
+    };
 
     const handleEditContact = async (contact: Contact) => {
         await onEditContact(contact);
         editDisclosure.onClose();
     }
 
+    const handlePersonalizeContact = async (contact: Contact) => {
+        await onPersonalizeContact(contact);
+        personalizeDisclosure.onClose();
+    }
+
     const handleDeleteContact = async () => {
         await onDeleteContact(selectedContact!.id);
+    }
+
+    const doesContactExist = (name: string) => {
+        return contacts.some(c => c.name === name)
     }
 
     return (
@@ -49,6 +63,7 @@ const ContactList: React.FC<ContactListProps> = ({ contacts, onEditContact, onDe
                             contact={contact}
                             onClick={() => openDetailModal(contact)}
                             onEdit={() => openEditModal(contact)}
+                            onPersonalize={() => openPersonalizeModal(contact)}
                             onDelete={() => onDeleteContact(contact.id)}
                         />
                     </Box>
@@ -72,8 +87,20 @@ const ContactList: React.FC<ContactListProps> = ({ contacts, onEditContact, onDe
                     <ModalBody>
                         <ContactDetail 
                             contact={selectedContact!} 
-                            onEdit={() => openEditModal(selectedContact!)} 
+                            onEdit={() => openEditModal(selectedContact!)}
+                            onPersonalize={() => openPersonalizeModal(selectedContact!)}
                             onDelete={handleDeleteContact} 
+                        />
+                    </ModalBody>
+                </ModalContent>
+            </Modal>
+            <Modal isOpen={personalizeDisclosure.isOpen} onClose={personalizeDisclosure.onClose}>
+                <ModalOverlay />
+                <ModalContent maxW="320px">
+                    <ModalBody>
+                        <PersonaForm 
+                            contact={selectedContact!}
+                            onSubmit={handlePersonalizeContact}
                         />
                     </ModalBody>
                 </ModalContent>
@@ -81,5 +108,4 @@ const ContactList: React.FC<ContactListProps> = ({ contacts, onEditContact, onDe
         </Box>
     );
 }
-
 export default ContactList;

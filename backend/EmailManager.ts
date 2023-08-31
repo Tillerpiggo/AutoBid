@@ -14,6 +14,27 @@ class EmailManager {
         this.dateManager = new DateManager();
     }
 
+    private emailForContact(persona: string) {
+        switch (persona) {
+            case "Home Goods Lover":
+                return "Check out our latest collection of home goods!";
+            case "The Active Person":
+                return "Explore our new range of sports equipment and activewear!";
+            case "In The Kitchen":
+                return "Discover our fresh selection of kitchen appliances and utensils!";
+            case "Cocktail & Beverage Enthusiast":
+                return "Try our new collection of cocktails and beverages!";
+            case "Self care aficionado":
+                return "Treat yourself with our new self-care and wellness products!";
+            case "Game Night":
+                return "Game night just got better with our new board games!";
+            case "All Things Functional":
+                return "Boost your productivity with our new range of functional items!";
+            default:
+                return "Have a look at our latest items!";
+        }
+    }
+
     private async sendEmail(to: string, subject: string, message: string) {
         try {
             const response = await mailchimp.messages.send({
@@ -42,7 +63,7 @@ class EmailManager {
                         emailsToSend.push({
                             to: user.email,
                             subject: `It's ${contact.name}'s Birthday Today!`,
-                            message: `Don't forget to wish ${contact.name} a happy birthday!`
+                            message: `Don't forget to wish ${contact.name} a happy birthday!\n\n${this.emailForContact(contact.persona)}`
                         });
                     } else {
                         console.log(`It's not ${contact.name}'s birthday today in the user's timezone.`);
@@ -71,7 +92,7 @@ class EmailManager {
     }
 
     startDailyJob() {
-        schedule.scheduleJob('26 19 * * *', async () => {
+        schedule.scheduleJob('0 16 * * *', async () => {
             console.log("sending emails");
             await this.sendEmailsForToday();
         });

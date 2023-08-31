@@ -40,7 +40,7 @@ const TimeSettings: React.FC<TimeSettingsProps> = ({ onTimeChange, onTimezoneCha
     };
 
     return (
-        <Box minHeight="100vh" p={8} bg="white">
+        <Box minHeight="100vh" p={8} bg="white" borderRadius="sm">
             <Heading as="h2" mb={6}>Time Settings</Heading>
             <VStack align="start" spacing={8}>
                 <FormControl id="email-time">

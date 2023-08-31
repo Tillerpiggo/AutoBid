@@ -4,6 +4,7 @@ export interface IContact extends Document {
     name: string;
     birthdayDay: number;
     birthdayMonth: number;
+    persona: string;
 }
 
 export interface IUser extends Document {
@@ -20,7 +21,8 @@ export interface IUser extends Document {
 const ContactSchema: Schema = new Schema<IContact>({
     name: { type: String, required: true },
     birthdayDay: { type: Number, required: true },
-    birthdayMonth: { type: Number, required: true }
+    birthdayMonth: { type: Number, required: true },
+    persona: { type: String, required: true }
 });
 
 const UserSchema: Schema = new Schema<IUser>({

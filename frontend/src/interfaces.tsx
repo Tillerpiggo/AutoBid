@@ -13,4 +13,5 @@ export interface Contact {
     name: string;
     birthdayDay: number;
     birthdayMonth: number;
+    persona: string;
 }

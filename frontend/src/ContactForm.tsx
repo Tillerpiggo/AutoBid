@@ -59,7 +59,8 @@ const ContactForm: React.FC<ContactFormProps> = ({ contact, onSubmit, doesContac
             id: contact?.id || "", 
             name: name,
             birthdayDay: birthdayDay,
-            birthdayMonth: birthdayMonth
+            birthdayMonth: birthdayMonth,
+            persona: ""
         };
 
         await onSubmit(newContact);

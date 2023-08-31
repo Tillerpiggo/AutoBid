@@ -27,7 +27,7 @@ export default class DatabaseManager {
     async addContactToUser(userId: string, name: string, birthdayDay: number, birthdayMonth: number) {
         const user = await this.getUserById(userId);
     
-        const newContact = new Contact({ name, birthdayDay, birthdayMonth });
+        const newContact = new Contact({ name, birthdayDay, birthdayMonth, persona: "None" });
         user.contacts.push(newContact);
 
         user.hasAddedContact = true;
@@ -36,7 +36,7 @@ export default class DatabaseManager {
         return user;
     }
 
-    async updateContact(userId: string, contactId: string, name: string, birthdayDay: number, birthdayMonth: number) {
+    async updateContact(userId: string, contactId: string, name: string, birthdayDay: number, birthdayMonth: number, persona: string) {
         console.log(`Updating contact with ID ${contactId} for user with ID ${userId}`);
         
         const user = await User.findById(userId);
@@ -58,6 +58,7 @@ export default class DatabaseManager {
     
         contact.birthdayDay = birthdayDay;
         contact.birthdayMonth = birthdayMonth;
+        contact.persona = persona;
     
         await user.save();
         console.log(`User with ID ${userId} updated successfully`);

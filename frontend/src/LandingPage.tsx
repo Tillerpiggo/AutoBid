@@ -19,14 +19,11 @@ const LandingPage: React.FC = () => {
                             fontWeight={700}
                             fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
                             lineHeight={'110%'}>
-                            Thoughtful gifts <br />
+                            Be the gift giver <br />
                             <Text as={'span'} color={'blue.400'}>
-                                made easy
+                                everybody loves
                             </Text>
                         </Heading>
-                        <Text fontSize={'md'} color={'gray.500'}>
-                            Emailed gift suggestions, right when you need them.
-                        </Text>
                     </Stack>
                     <Stack
                         direction={'column'}

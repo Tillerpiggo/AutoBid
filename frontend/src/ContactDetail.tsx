@@ -1,16 +1,18 @@
-import { Box, Button, Flex, Heading, HStack, Tag, Text, useColorModeValue, Avatar, Badge } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, HStack, Center, Text, useColorModeValue, Avatar, Badge } from '@chakra-ui/react';
 import React from 'react';
 import ContactOptions from './ContactOptions';
 import { Contact } from './interfaces';
 import DateService from './dateService';
+import PersonaButton from './PersonaButton';
 
 interface ContactDetailProps {
     contact: Contact;
     onEdit: () => void;
+    onPersonalize: () => void;
     onDelete: () => void;
 }
 
-const ContactDetail: React.FC<ContactDetailProps> = ({ contact, onEdit, onDelete }) => {
+const ContactDetail: React.FC<ContactDetailProps> = ({ contact, onEdit, onPersonalize, onDelete }) => {
     return (
         <Box
             maxW={"320px"}
@@ -48,38 +50,14 @@ const ContactDetail: React.FC<ContactDetailProps> = ({ contact, onEdit, onDelete
                     py={1}
                     bg={useColorModeValue('gray.50', 'gray.800')}
                     fontWeight={'400'}
+                    textTransform={"none"}
                 >
-                    #art
-                </Badge>
-                <Badge
-                    px={2}
-                    py={1}
-                    bg={useColorModeValue('gray.50', 'gray.800')}
-                    fontWeight={'400'}
-                >
-                    #science
+                    {contact.persona === "None" ? "Loves Everything" : contact.persona}
                 </Badge>
             </HStack>
-
-            <Button
-                mt={8}
-                w={"full"}
-                fontSize={'sm'}
-                rounded={'full'}
-                bg={'blue.400'}
-                color={'white'}
-                boxShadow={
-                    '0px 1px 25px -5px rgba(16, 112, 202, 0.48), 0 10px 10px -5px rgba(16, 112, 202, 0.43)'
-                }
-                _hover={{
-                    bg: 'blue.500',
-                }}
-                _focus={{
-                    bg: 'blue.500',
-                }}
-            >
-                Personalize Suggestions
-            </Button>
+            <Center mt={8} w={"full"} >
+                <PersonaButton persona={contact.persona} onClick={onPersonalize} />
+            </Center>
         </Box>
     );
 }
