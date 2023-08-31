@@ -37,7 +37,7 @@ class EmailManager {
             const users = await this.getUserList();
             for (const user of users) {
                 for (const contact of user.contacts) {
-                    if (this.dateManager.isToday(contact.birthdayDay, contact.birthdayMonth, user.timezone)) {
+                    if (this.dateManager.isTargetDay(contact.birthdayDay, contact.birthdayMonth, user.daysBeforeEmailSend, user.timezone)) {
                         console.log(`It's ${contact.name}'s birthday today in the user's timezone!`);
                         emailsToSend.push({
                             to: user.email,

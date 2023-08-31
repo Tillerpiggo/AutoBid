@@ -24,9 +24,9 @@ export const UserController = (databaseManager: DatabaseManager) => {
 
     const updateUser = async (req: Request, res: Response) => {
         const { userId } = req.params;
-        const { timezone, emailSendTime } = req.body;
+        const { timezone, emailSendTime, daysBeforeEmailSend } = req.body;
         try {
-            const user = await databaseManager.updateUser(userId, timezone, emailSendTime);
+            const user = await databaseManager.updateUser(userId, timezone, emailSendTime, daysBeforeEmailSend);
             if (!user) {
                 return res.status(404).send({ error: 'User not found' });
             }

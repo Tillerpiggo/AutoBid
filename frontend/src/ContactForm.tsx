@@ -2,28 +2,33 @@ import { Contact } from './interfaces';
 import React, { useState, useEffect } from 'react';
 import {
     Box,
-    Text,
     Stack,
+    Flex,
     Button,
     Input,
     FormControl,
     FormLabel,
+    FormHelperText,
     Heading,
-    useColorModeValue,
-    Select
+    Select,
+    Collapse,
+    Alert,
+    AlertIcon
 } from '@chakra-ui/react'
 
 export interface ContactFormProps {
     contact?: Contact;
     onSubmit: (contact: Contact) => Promise<void>;
+    doesContactExist: (name: string) => boolean;
 }
 
-const ContactForm: React.FC<ContactFormProps> = ({ contact, onSubmit }) => {
+const ContactForm: React.FC<ContactFormProps> = ({ contact, onSubmit, doesContactExist }) => {
     const [name, setName] = useState(contact?.name || "");
     const [birthdayDay, setBirthdayDay] = useState(contact?.birthdayDay || 1); // Default day is 1
     const [birthdayMonth, setBirthdayMonth] = useState(contact?.birthdayMonth || 1); // Default month is 1 (January)
     const [initialState, setInitialState] = useState({ name, birthdayDay, birthdayMonth });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showWarning, setShowWarning] = useState(false);
 
     useEffect(() => {
         setInitialState({ name, birthdayDay, birthdayMonth });
@@ -32,6 +37,12 @@ const ContactForm: React.FC<ContactFormProps> = ({ contact, onSubmit }) => {
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         if (event.target.name === 'name') {
             setName(event.target.value);
+            // Check if a contact with the new name already exists
+            if (doesContactExist(event.target.value)) {
+                setShowWarning(true);
+            } else {
+                setShowWarning(false);
+            }
         } else if (event.target.name === 'birthdayDay') {
             setBirthdayDay(Number(event.target.value));
         } else if (event.target.name === 'birthdayMonth') {
@@ -68,10 +79,16 @@ const ContactForm: React.FC<ContactFormProps> = ({ contact, onSubmit }) => {
             px={4}
             py={8}
             textAlign={'left'}>
-            <Heading size="md" mb={6}>{contact ? "Edit Contact" : "Add Contact"}</Heading>
+            <Heading size="md" mb={6} textAlign="center">{contact ? "Edit Contact" : "Add Contact"}</Heading>
             <FormControl id="name">
                 <FormLabel>Name</FormLabel>
                 <Input type="text" name="name" value={name} onChange={handleInputChange} isDisabled={isSubmitting} />
+                <Collapse in={showWarning}>
+                    <Alert status="warning" mt={2} bg="orange.100" borderRadius="md" alignItems="center">
+                        <AlertIcon />
+                        <Box fontSize="sm" as="div" color="orange.500" ml={2}>A contact with this name already exists!</Box>
+                    </Alert>
+                </Collapse>
             </FormControl>
             <FormControl id="birthdayMonth" mt={4}>
                 <FormLabel>Birthday Month</FormLabel>

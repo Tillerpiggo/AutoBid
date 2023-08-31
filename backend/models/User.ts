@@ -9,8 +9,10 @@ export interface IContact extends Document {
 export interface IUser extends Document {
     email: string;
     timezone: string;
-    emailSendTime: string; // Added line
+    emailSendTime: string;
+    daysBeforeEmailSend: number;
     contacts: IContact[];
+    hasAddedContact: boolean;
 
     getContact: (id: string) => IContact | undefined;
 }
@@ -24,8 +26,10 @@ const ContactSchema: Schema = new Schema<IContact>({
 const UserSchema: Schema = new Schema<IUser>({
     email: { type: String, required: true, unique: true },
     timezone: { type: String, required: true },
-    emailSendTime: { type: String, required: true, match: /^([01]\d|2[0-3]):([0-5]\d)$/ }, // Added line
-    contacts: [ContactSchema]
+    emailSendTime: { type: String, required: true, match: /^([01]\d|2[0-3]):([0-5]\d)$/ },
+    daysBeforeEmailSend: { type: Number, required: true },
+    contacts: [ContactSchema],
+    hasAddedContact: { type: Boolean, required: true }
 });
 
 UserSchema.virtual('id').get(function(this: IUser) {

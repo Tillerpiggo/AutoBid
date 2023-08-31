@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 
 class DateManager {
-    isToday(day: number, month: number, timezone: string): boolean {
+    isTargetDay(day: number, month: number, daysOffset: number, timezone: string): boolean {
         if (day < 1 || day > 31) {
             throw new Error('Invalid day');
         }
@@ -11,9 +11,10 @@ class DateManager {
         if (!DateTime.fromObject({}, {zone: timezone}).isValid) {
             throw new Error('Invalid timezone');
         }
-        
-        const now = DateTime.now().setZone(timezone);
-        return now.day === day && now.month === month;
+
+        const targetDate = DateTime.now().setZone(timezone).plus({days: daysOffset});
+        console.log(`targetDate: ${targetDate.day} ${targetDate.month}`);
+        return targetDate.day === day && targetDate.month === month;
     }
 }
 

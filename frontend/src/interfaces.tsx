@@ -4,6 +4,8 @@ export interface User {
     contacts: Contact[];
     timezone: string;
     emailSendTime: string;
+    daysBeforeEmailSend: number;
+    hasAddedContact: boolean;
 }
 
 export interface Contact {

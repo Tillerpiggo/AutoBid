@@ -19,16 +19,18 @@ export default class DatabaseManager {
     }
 
     async createUser(email: string, timezone: string) {
-        const user = new User({ email, timezone, emailSendTime: '09:00' });
+        const user = new User({ email, timezone, emailSendTime: '09:00', daysBeforeEmailSend: 14, hasAddedContact: false });
         await user.save();
         return user;
     }
 
     async addContactToUser(userId: string, name: string, birthdayDay: number, birthdayMonth: number) {
-        const user = await this.getUserById(userId); // Changed to getUserById
+        const user = await this.getUserById(userId);
     
         const newContact = new Contact({ name, birthdayDay, birthdayMonth });
         user.contacts.push(newContact);
+
+        user.hasAddedContact = true;
     
         await user.save();
         return user;
@@ -79,7 +81,7 @@ export default class DatabaseManager {
         return user;
     }
 
-    async updateUser(id: string, timezone: string, emailSendTime: string) {
+    async updateUser(id: string, timezone: string, emailSendTime: string, daysBeforeEmailSend: number) {
         const user = await User.findById(id);
         if (!user) {
             console.error(`User with ID ${id} not found`);
@@ -87,6 +89,7 @@ export default class DatabaseManager {
         }
         user.timezone = timezone;
         user.emailSendTime = emailSendTime;
+        user.daysBeforeEmailSend = daysBeforeEmailSend;
         await user.save();
         console.log(`User with ID ${id} updated successfully`);
         return user;

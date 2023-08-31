@@ -27,7 +27,7 @@ const Settings: React.FC = () => {
             console.error('No user ID provided or user data not loaded');
             return;
         }
-        const updatedUser = await userService.updateUser(userId, userData.timezone, newTime);
+        const updatedUser = await userService.updateUser(userId, userData.timezone, newTime, userData.daysBeforeEmailSend);
         setUserData(updatedUser);
         console.log('New time:', newTime);
     }
@@ -37,9 +37,19 @@ const Settings: React.FC = () => {
             console.error('No user ID provided or user data not loaded');
             return;
         }
-        const updatedUser = await userService.updateUser(userId, newTimezone, userData.emailSendTime);
+        const updatedUser = await userService.updateUser(userId, newTimezone, userData.emailSendTime, userData.daysBeforeEmailSend);
         setUserData(updatedUser);
         console.log('New timezone:', newTimezone);
+    }
+
+    const handleDaysChange = async (newDays: number) => {
+        if (!userId || !userData) {
+            console.error('No user ID provided or user data not loaded');
+            return;
+        }
+        const updatedUser = await userService.updateUser(userId, userData.timezone, userData.emailSendTime, newDays);
+        setUserData(updatedUser);
+        console.log('New days before email send:', newDays);
     }
 
     if (!userData) return null; // Or a loading spinner
@@ -48,8 +58,10 @@ const Settings: React.FC = () => {
         <TimeSettings
             initialTime={userData.emailSendTime}
             initialTimezone={userData.timezone}
+            initialDays={userData.daysBeforeEmailSend}
             onTimeChange={handleTimeChange}
             onTimezoneChange={handleTimezoneChange}
+            onDaysChange={handleDaysChange}
         />
     );
 };

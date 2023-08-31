@@ -64,11 +64,12 @@ const userService = {
         }
     },
 
-    updateUser: async (userId: string, timezone: string, emailSendTime: string): Promise<User | null> => {
+    updateUser: async (userId: string, timezone: string, emailSendTime: string, daysBeforeEmailSend: number): Promise<User | null> => {
         try {
             const response = await axios.put(`${API_BASE_URL}/users/${userId}`, {
                 timezone,
                 emailSendTime,
+                daysBeforeEmailSend
             });
 
             if (response.data && response.data.message === 'User updated') {

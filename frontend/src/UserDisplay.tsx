@@ -4,7 +4,6 @@ import ContactList from './ContactList';
 import ContactForm from './ContactForm';
 import { useParams } from 'react-router-dom';
 import userService from './userService';
-import TimeSettings from './TimeSettings';
 import { FaPlus } from 'react-icons/fa';
 import {
     Box, VStack, Heading, Flex, Button, useDisclosure, Modal, Text,
@@ -70,6 +69,11 @@ const UserDisplay: React.FC = () => {
         }
     };
 
+    const doesContactExist = (name: string) => {
+        if (!userData) { return false }
+        return userData.contacts.some(contact => contact.name.toLowerCase() === name.toLowerCase());
+    }
+
     if (!userData) {
         return <div>Loading...</div>;
     }
@@ -94,7 +98,7 @@ const UserDisplay: React.FC = () => {
                     <ModalContent maxW="320px">
                         <ModalCloseButton />
                         <ModalBody>
-                            <ContactForm onSubmit={handleContactAdd} />
+                            <ContactForm onSubmit={handleContactAdd} doesContactExist={doesContactExist} />
                         </ModalBody>
                     </ModalContent>
                 </Modal>

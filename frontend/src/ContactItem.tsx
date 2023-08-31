@@ -1,24 +1,22 @@
 import { Contact } from './interfaces';
 import ContactOptions from './ContactOptions';
-import { 
-    Box, Stack, Flex, Text, useColorModeValue, Avatar, useDisclosure, 
-    Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton 
-} from '@chakra-ui/react';
+import { Box, Stack, Flex, Text, useColorModeValue, Avatar } from '@chakra-ui/react';
 import React from 'react';
-import ContactForm from './ContactForm';
-import ContactDetail from './ContactDetail';
 import DateService from './dateService';
 
 interface ContactItemProps {
     contact: Contact;
-    onEdit: (contact: Contact) => Promise<void>;
+    onClick: (contact: Contact) => void;
+    onEdit: (contact: Contact) => void;
     onDelete: (id: string) => Promise<void>;
 }
 
-const ContactItem: React.FC<ContactItemProps> = ({ contact, onEdit, onDelete }) => {
-    const detailDisclosure = useDisclosure();
-    const editDisclosure = useDisclosure();
-
+const ContactItem: React.FC<ContactItemProps> = ({ 
+    contact, 
+    onDelete,
+    onClick: onDetailsOpen,
+    onEdit
+}) => {
     // Formatted birthday using DateService
     const birthday = DateService.getFormattedDate(contact.birthdayDay, contact.birthdayMonth);
 
@@ -27,22 +25,15 @@ const ContactItem: React.FC<ContactItemProps> = ({ contact, onEdit, onDelete }) 
     };
 
     const handleStartEdit = () => {
-        editDisclosure.onOpen();
+        onEdit(contact);
     };
 
-    const handleFinishEdit = async (contact: Contact) => {
-        await onEdit(contact);
-        editDisclosure.onClose();
-        detailDisclosure.onClose();
-    }
-
     const handleEditFromContactOptions = () => {
-        editDisclosure.onOpen();
-        detailDisclosure.onClose();
+        onEdit(contact);
     };
 
     const handleItemClick = () => {
-        detailDisclosure.onOpen();
+        onDetailsOpen(contact);
     };
 
     return (
@@ -68,23 +59,6 @@ const ContactItem: React.FC<ContactItemProps> = ({ contact, onEdit, onDelete }) 
                 </Stack>
                 <ContactOptions onEdit={handleEditFromContactOptions} onDelete={handleDelete} />
             </Flex>
-            <Modal isOpen={detailDisclosure.isOpen} onClose={detailDisclosure.onClose}>
-                <ModalOverlay />
-                <ModalContent maxW="320px">
-                    <ModalBody>
-                        <ContactDetail contact={contact} onEdit={handleStartEdit} onDelete={handleDelete} />
-                    </ModalBody>
-                </ModalContent>
-            </Modal>
-            <Modal isOpen={editDisclosure.isOpen} onClose={editDisclosure.onClose}>
-                <ModalOverlay />
-                <ModalContent maxW="320px">
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <ContactForm contact={contact} onSubmit={handleFinishEdit} />
-                    </ModalBody>
-                </ModalContent>
-            </Modal>
         </Box>
     );
 }
