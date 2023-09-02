@@ -18,63 +18,37 @@ import {
     FlexProps,
     Menu,
     MenuButton,
-    MenuDivider,
     MenuItem,
     MenuList,
+    useBreakpointValue
 } from '@chakra-ui/react'
 
 import {
-    FiHome,
-    FiTrendingUp,
-    FiCompass,
-    FiUsers,
-    FiSettings,
     FiMenu,
-    FiBell,
     FiChevronDown,
 } from 'react-icons/fi'
 import { IconType } from 'react-icons'
-import { Route, Routes, Link, useResolvedPath } from 'react-router-dom';
-import UserDisplay from '../Portal Contacts/UserDisplay';
-import Settings from './Settings';
-import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import { ReactNode, useState, useEffect } from 'react';
 import userService from '../Services/userService';
 
-interface LinkItemProps {
-  name: string
-  icon: IconType
-}
-
-interface NavItemProps extends FlexProps {
-  icon: IconType
-  children: React.ReactNode
-  isSelected: boolean
-  onClick: () => void
-}
-
-interface MobileProps extends FlexProps {
-    onOpen: () => void;
-    userEmail: string;
-    onProfile: () => void;
-    onLogout: () => void;
+interface SidebarItem {
+    name: string;
+    icon: IconType;
+    route: string; 
 }
 
 interface SidebarProps extends BoxProps {
-  onClose: () => void
+    items: SidebarItem[];
+    onClose: () => void;
+    logoText: string;
 }
 
-const LinkItems: Array<LinkItemProps> = [
-    { name: 'Contacts', icon: FiUsers },
-    { name: 'Settings', icon: FiSettings },
-];
-
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-    const [selectedItem, setSelectedItem] = useState('Contacts');
+const SidebarContent = ({ onClose, items, logoText, ...rest }: SidebarProps) => {
+    const [selectedItem, setSelectedItem] = useState(items[0].name);
 
     return (
         <Box
-            transition="3s ease"
             bg={useColorModeValue('white', 'gray.900')}
             borderRight="1px"
             borderRightColor={useColorModeValue('gray.200', 'gray.700')}
@@ -84,31 +58,38 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             {...rest}>
             <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
                 <Text fontSize="2xl" fontFamily="Work Sans" fontWeight="bold">
-                Gift Sharp.
+                {logoText}
                 </Text>
                 <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
             </Flex>
-            {LinkItems.map((link) => (
+            {items.map((item) => (
                 <NavItem
-                    key={link.name}
-                    icon={link.icon}
-                    isSelected={link.name === selectedItem}
-                    onClick={() => setSelectedItem(link.name)}
+                    key={item.name}
+                    icon={item.icon}
+                    route={item.route}
+                    isSelected={item.name === selectedItem}
+                    onClick={() => setSelectedItem(item.name)}
                 >
-                {link.name}
+                {item.name}
             </NavItem>
             ))}
         </Box>
     )
 }
 
-const NavItem = ({ icon, children, isSelected, onClick, ...rest }: NavItemProps) => {
-    const url = useResolvedPath("").pathname;
+interface NavItemProps extends FlexProps {
+    icon: IconType
+    children: React.ReactNode
+    isSelected: boolean
+    route: string
+    onClick: () => void
+}
 
+const NavItem = ({ icon, children, isSelected, onClick, route, ...rest }: NavItemProps) => {
     return (
         <Box
             as={Link}
-            to={children ? `${url}/${children.toString().toLowerCase()}` : '#'}
+            to={route}
             style={{ textDecoration: 'none' }}
             _focus={{ boxShadow: 'none' }}
             onClick={onClick}
@@ -121,11 +102,11 @@ const NavItem = ({ icon, children, isSelected, onClick, ...rest }: NavItemProps)
                 role="group"
                 cursor="pointer"
                 _hover={{
-                    bg: isSelected ? 'blue.50' : 'white', // Changed to light red
+                    bg: isSelected ? 'blue.50' : 'white',
                     color: 'blue.600',
                 }}
-                bg={isSelected ? 'blue.50' : undefined} // Add background if selected
-                color={isSelected ? 'blue.600' : undefined} // Add color if selected
+                bg={isSelected ? 'blue.50' : undefined}
+                color={isSelected ? 'blue.600' : undefined}
                 {...rest}
             >
                 {icon && (
@@ -143,9 +124,20 @@ const NavItem = ({ icon, children, isSelected, onClick, ...rest }: NavItemProps)
         </Box>
     );
 };
-  
 
-const MobileNav = ({ userEmail, onOpen, onProfile, onLogout }: MobileProps) => {
+interface MobileProps extends FlexProps {
+    onOpen: () => void;
+    username: string;
+    userRole: string;
+    onLogout: () => void;
+}
+
+const MobileNav = ({ onOpen, username, userRole, onLogout }: MobileProps) => {
+
+    const onProfile = () => {
+        // Do nothing (for now)
+    };
+
     return (
         <Flex
             ml={{ base: 0, md: 60 }}
@@ -186,11 +178,10 @@ const MobileNav = ({ userEmail, onOpen, onProfile, onLogout }: MobileProps) => {
                                     display={{ base: 'none', md: 'flex' }}
                                     alignItems="flex-start"
                                     spacing="1px"
-                                    ml="2">
-                                    <Text fontSize="sm">{userEmail}</Text>
-                                    <Text fontSize="xs" color="gray.600">
-                                        Gift Extraordinaire
-                                    </Text>
+                                    ml="2"
+                                >
+                                    <Text fontSize="sm">{username}</Text>
+                                    <Text fontSize="xs" color="gray.600">{userRole}</Text>
                                 </VStack>
                                 <Box display={{ base: 'none', md: 'flex' }}>
                                     <FiChevronDown />
@@ -210,12 +201,34 @@ const MobileNav = ({ userEmail, onOpen, onProfile, onLogout }: MobileProps) => {
     )
 }
 
-const SidebarWithHeader = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const { userId } = useParams();
-    const navigate = useNavigate();
+interface SidebarWithHeaderProps {
+    items: SidebarItem[];
+    logoText: string;
+    username?: string;
+    userRole: string;
+    onLogoutRoute: string;
+    children: ReactNode;
+}
 
+export const SidebarWithHeader = ({
+    items,
+    logoText,
+    username,
+    userRole,
+    onLogoutRoute,
+    children,
+}: SidebarWithHeaderProps) => {
+    const { isOpen: isMobileNavOpen, onOpen: onMobileNavOpen, onClose: onMobileNavClose } = useDisclosure();
+    const { isOpen: isSidebarOpen, onOpen: onSidebarOpen, onClose: onSidebarClose } = useDisclosure();
+    const isDesktop = useBreakpointValue({ base: false, md: true });
+    const navigate = useNavigate();
+    
+    const { userId } = useParams<{ userId: string }>();
     const [userEmail, setUserEmail] = useState("");
+
+    const handleLogout = () => {
+        navigate(onLogoutRoute);
+    }
 
     // Fetch user email
     useEffect(() => {
@@ -231,35 +244,43 @@ const SidebarWithHeader = () => {
         fetchUser();
     }, [userId]);
 
-    const onProfile = () => {
-        // Do nothing (for now)
-    };
+    useEffect(() => {
+        if (isDesktop) {
+            onSidebarOpen();
+        } else {
+            onSidebarClose();
+        }
+    }, [isDesktop, onSidebarOpen, onSidebarClose]);
 
-    const onLogout = () => {
-        navigate("/");
-    };
+    let displayName = username || userEmail;
+
+    const sidebarWidth = '60';
+    const childrenPadding = isSidebarOpen ? sidebarWidth : '0';
 
     return (
-        <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
-            <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
+        <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')} >
+            <SidebarContent
+                onClose={onSidebarClose}
+                items={items}
+                logoText={logoText}
+            />
             <Drawer
-                isOpen={isOpen}
+                autoFocus={false}
+                isOpen={isMobileNavOpen}
                 placement="left"
-                onClose={onClose}
+                onClose={onMobileNavClose}
                 returnFocusOnClose={false}
-                onOverlayClick={onClose}
+                onOverlayClick={onMobileNavClose}
                 size="full">
                 <DrawerContent>
-                    <SidebarContent onClose={onClose} />
+                    <SidebarContent onClose={onMobileNavClose} items={items} logoText={logoText} />
                 </DrawerContent>
             </Drawer>
-            {/* mobilenav */}
-            <MobileNav onOpen={onOpen} userEmail={userEmail} onProfile={onProfile} onLogout={onLogout} />
-            <Box ml={{ base: 0, md: 200 }} p="12" px="20">
-                <Routes>
-                    <Route path="contacts" element={<UserDisplay />} />
-                    <Route path="settings" element={<Settings />} />
-                </Routes>
+            <MobileNav onOpen={onMobileNavOpen} username={displayName} userRole={userRole} onLogout={handleLogout} />
+            <Box pl={{ md: childrenPadding }} pt="6" pb="4">
+                <Box px="6">
+                    {children}
+                </Box>
             </Box>
         </Box>
     );

@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Heading, HStack, Center, Text, useColorModeValue, Avatar, Badge } from '@chakra-ui/react';
 import React from 'react';
-import ContactOptions from './ContactOptions';
+import OptionsButton from '../Components/OptionsButton';
 import { Contact } from '../App/interfaces';
 import DateService from '../Services/dateService';
 import PersonaButton from './PersonaButton';
@@ -28,7 +28,7 @@ const ContactDetail: React.FC<ContactDetailProps> = ({ contact, onEdit, onPerson
                 top={4}
                 right={4}
             >
-                <ContactOptions onEdit={onEdit} onDelete={onDelete} />
+                <OptionsButton onEdit={onEdit} onDelete={onDelete} />
             </Flex>
 
             <Avatar

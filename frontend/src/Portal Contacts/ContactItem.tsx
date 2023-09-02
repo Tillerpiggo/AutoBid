@@ -1,5 +1,5 @@
 import { Contact } from '../App/interfaces';
-import ContactOptions from './ContactOptions';
+import OptionsButton from '../Components/OptionsButton';
 import { Box, Stack, Flex, Text, useColorModeValue, Avatar, Button } from '@chakra-ui/react';
 import PersonaButton from './PersonaButton';
 import React from 'react';
@@ -67,7 +67,7 @@ const ContactItem: React.FC<ContactItemProps> = ({
                         onClick={handlePersonalize}
                         persona={contact.persona}
                     />
-                    <ContactOptions onEdit={handleEditFromContactOptions} onDelete={handleDelete} />
+                    <OptionsButton onEdit={handleEditFromContactOptions} onDelete={handleDelete} />
                 </Flex>
             </Flex>
         </Box>

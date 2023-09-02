@@ -15,12 +15,12 @@ import {
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { RiPencilLine, RiDeleteBin6Line } from 'react-icons/ri';
 
-interface ContactOptionsProps {
+interface OptionsButtonProps {
     onEdit: () => void;
     onDelete: () => void;
 }
 
-const ContactOptions: React.FC<ContactOptionsProps> = ({ onEdit, onDelete }) => {
+const OptionsButton: React.FC<OptionsButtonProps> = ({ onEdit, onDelete }) => {
     const handleIconButtonClick = (event: React.MouseEvent) => {
         event.stopPropagation();
     };
@@ -82,4 +82,4 @@ const ContactOptions: React.FC<ContactOptionsProps> = ({ onEdit, onDelete }) => 
     )
 }
 
-export default ContactOptions;
+export default OptionsButton;

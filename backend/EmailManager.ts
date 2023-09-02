@@ -1,4 +1,4 @@
-import { IUser } from './models/User';
+import { IUser } from './models/Models';
 import schedule from 'node-schedule';
 import DateManager from './DateManager';
 

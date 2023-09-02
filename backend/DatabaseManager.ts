@@ -1,4 +1,4 @@
-import User, { Contact } from './models/User';
+import User, { Contact, Product, Persona } from './models/Models';
 import mongoose from 'mongoose';
 
 export default class DatabaseManager {
@@ -54,20 +54,11 @@ export default class DatabaseManager {
         if (name) {
             console.log(`Updating name from ${contact.name} to ${name}`);
             contact.name = name;
-            console.log(`Name has been updated to ${contact.name}`);
         }
-        
-        console.log(`Updating birthday day to ${birthdayDay}`);
+    
         contact.birthdayDay = birthdayDay;
-        console.log(`Birthday day has been updated to ${contact.birthdayDay}`);
-        
-        console.log(`Updating birthday month to ${birthdayMonth}`);
         contact.birthdayMonth = birthdayMonth;
-        console.log(`Birthday month has been updated to ${contact.birthdayMonth}`);
-        
-        console.log(`Updating persona to ${persona}`);
         contact.persona = persona;
-        console.log(`Persona has been updated to ${contact.persona}`);
     
         await user.save();
         console.log(`User with ID ${userId} updated successfully`);
@@ -103,5 +94,37 @@ export default class DatabaseManager {
         await user.save();
         console.log(`User with ID ${id} updated successfully`);
         return user;
+    }
+
+    // PERSONAS:
+
+    async getPersonaByName(name: string) {
+        return await Persona.findOne({ name });
+    }
+
+    async createPersona(name: string) {
+        const persona = new Persona({ name });
+        await persona.save();
+        return persona;
+    }
+
+    async getAllPersonas() {
+        return await Persona.find({});
+    }
+
+    async updatePersona(personaId: string, name: string) {
+        const persona = await Persona.findById(personaId);
+        if (!persona) {
+            console.error(`Persona with ID ${personaId} not found`);
+            return;
+        }
+        persona.name = name;
+        await persona.save();
+        console.log(`Persona with ID ${personaId} updated successfully`);
+        return persona;
+    }
+
+    async deletePersona(personaId: string) {
+        return await Persona.findByIdAndDelete(personaId);
     }
 }

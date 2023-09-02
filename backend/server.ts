@@ -7,6 +7,7 @@ import DatabaseManager from './DatabaseManager';
 
 import { UserController } from './controllers/UserController';
 import { ContactController } from './controllers/ContactController';
+import { PersonaController } from './controllers/PersonaController';
 
 // Setup the app
 const app = express();
@@ -28,6 +29,7 @@ emailManager.startDailyJob();
 // Setup controllers
 const userController = UserController(databaseManager);
 const contactController = ContactController(databaseManager);
+const personaController = PersonaController(databaseManager);
 
 // User routes
 app.post('/register', userController.registerUser);
@@ -41,6 +43,12 @@ app.delete('/users/:userId', userController.deleteUser);
 app.post('/users/:userId/contacts', contactController.addContact);
 app.put('/users/:userId/contacts/:contactId', contactController.updateContact);
 app.delete('/users/:userId/contacts/:contactId', contactController.deleteContact);
+
+// Admin (product and persona) routes
+app.post('/admin/personas', personaController.addPersona);
+app.get('/admin/personas', personaController.getAllPersona);
+app.put('/admin/personas/:personaId', personaController.editPersona);
+app.delete('/admin/personas/:personaId', personaController.deletePersona);
 
 app.post('/debug/send-emails', async (req: Request, res: Response) => {
     emailManager.sendEmailsNow();
