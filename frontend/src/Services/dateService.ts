@@ -1,5 +1,5 @@
-import ContactDetail from "./ContactDetail";
-import { Contact } from "./interfaces";
+import ContactDetail from "../Portal Contacts/ContactDetail";
+import { Contact } from "../App/interfaces";
 
 class DateService {
     private static months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber"];

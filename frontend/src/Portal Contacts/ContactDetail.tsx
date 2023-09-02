@@ -1,8 +1,8 @@
 import { Box, Button, Flex, Heading, HStack, Center, Text, useColorModeValue, Avatar, Badge } from '@chakra-ui/react';
 import React from 'react';
 import ContactOptions from './ContactOptions';
-import { Contact } from './interfaces';
-import DateService from './dateService';
+import { Contact } from '../App/interfaces';
+import DateService from '../Services/dateService';
 import PersonaButton from './PersonaButton';
 
 interface ContactDetailProps {

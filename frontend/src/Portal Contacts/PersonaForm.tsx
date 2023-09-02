@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Contact } from './interfaces';
+import { Contact } from '../App/interfaces';
 import { Box, RadioGroup, Radio, VStack, Button, Heading } from '@chakra-ui/react';
 
 interface PersonaFormProps {
@@ -21,11 +21,12 @@ const PersonaForm: React.FC<PersonaFormProps> = ({ contact, onSubmit }) => {
     ];
   
     const handleChange = (value: string) => {
+        console.log("handle change");
         setPersona(value);
     };
   
     const handleSubmit = async () => {
-        contact.persona = persona
+        contact.persona = (persona === "") ? "None" : persona
         await onSubmit(contact);
     };
   

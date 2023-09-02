@@ -35,11 +35,11 @@ import {
 } from 'react-icons/fi'
 import { IconType } from 'react-icons'
 import { Route, Routes, Link, useResolvedPath } from 'react-router-dom';
-import UserDisplay from './UserDisplay';
+import UserDisplay from '../Portal Contacts/UserDisplay';
 import Settings from './Settings';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import userService from './userService';
+import userService from '../Services/userService';
 
 interface LinkItemProps {
   name: string

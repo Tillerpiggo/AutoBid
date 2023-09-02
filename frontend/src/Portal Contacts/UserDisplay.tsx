@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { User, Contact } from './interfaces';
+import { User, Contact } from '../App/interfaces';
 import ContactList from './ContactList';
 import ContactForm from './ContactForm';
 import { useParams } from 'react-router-dom';
-import userService from './userService';
+import userService from '../Services/userService';
 import { FaPlus, FaAddressBook } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import {

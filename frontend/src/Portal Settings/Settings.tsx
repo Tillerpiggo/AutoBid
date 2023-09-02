@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDisclosure } from '@chakra-ui/react';
 import TimeSettings from './TimeSettings';
-import userService from './userService';
-import { User } from './interfaces';
+import userService from '../Services/userService';
+import { User } from '../App/interfaces';
 
 const Settings: React.FC = () => {
     const { userId } = useParams<{ userId: string }>();

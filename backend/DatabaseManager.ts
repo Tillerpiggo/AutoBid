@@ -54,11 +54,20 @@ export default class DatabaseManager {
         if (name) {
             console.log(`Updating name from ${contact.name} to ${name}`);
             contact.name = name;
+            console.log(`Name has been updated to ${contact.name}`);
         }
-    
+        
+        console.log(`Updating birthday day to ${birthdayDay}`);
         contact.birthdayDay = birthdayDay;
+        console.log(`Birthday day has been updated to ${contact.birthdayDay}`);
+        
+        console.log(`Updating birthday month to ${birthdayMonth}`);
         contact.birthdayMonth = birthdayMonth;
+        console.log(`Birthday month has been updated to ${contact.birthdayMonth}`);
+        
+        console.log(`Updating persona to ${persona}`);
         contact.persona = persona;
+        console.log(`Persona has been updated to ${contact.persona}`);
     
         await user.save();
         console.log(`User with ID ${userId} updated successfully`);

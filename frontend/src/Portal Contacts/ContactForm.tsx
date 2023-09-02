@@ -1,4 +1,4 @@
-import { Contact } from './interfaces';
+import { Contact } from '../App/interfaces';
 import React, { useState, useEffect } from 'react';
 import {
     Box,
@@ -60,7 +60,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ contact, onSubmit, doesContac
             name: name,
             birthdayDay: birthdayDay,
             birthdayMonth: birthdayMonth,
-            persona: ""
+            persona: contact?.persona || "None"
         };
 
         await onSubmit(newContact);

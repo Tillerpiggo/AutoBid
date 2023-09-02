@@ -21,7 +21,7 @@ const Register: React.FC = () => {
         // Get the user's timezone, defaulting to 'EST' if not available.
         let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/New_York';
 
-        fetch('http://localhost:3000/register', {
+        fetch(`http://localhost:3000/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

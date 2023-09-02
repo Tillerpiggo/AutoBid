@@ -15,9 +15,6 @@ const CustomButton: React.FC<CustomButtonProps> = ({ label, handleClick, ...prop
         bg={'blue.400'}
         color={'white'}
         onClick={handleClick}
-        // boxShadow={
-        //   '0px 1px 25px -5px rgb(255 99 71 / 48%), 0 10px 10px -5px rgb(255 99 71 / 43%)'
-        // }
         _hover={{
           bg: 'blue.500',
         }}

@@ -1,9 +1,9 @@
-import { Contact } from './interfaces';
+import { Contact } from '../App/interfaces';
 import ContactOptions from './ContactOptions';
 import { Box, Stack, Flex, Text, useColorModeValue, Avatar, Button } from '@chakra-ui/react';
 import PersonaButton from './PersonaButton';
 import React from 'react';
-import DateService from './dateService';
+import DateService from '../Services/dateService';
 
 interface ContactItemProps {
     contact: Contact;

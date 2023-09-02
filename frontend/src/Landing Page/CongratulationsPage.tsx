@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom';
-import { User } from './interfaces';
+import { User } from '../App/interfaces';
 import { Button, Image, Box, Text, Heading, Container, Stack, Alert, AlertIcon, AlertTitle, AlertDescription } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import userService from './userService';
+import userService from '../Services/userService';
 import Confetti from 'react-confetti';
 import { useWindowSize } from '@react-hook/window-size';
 

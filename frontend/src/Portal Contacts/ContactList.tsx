@@ -1,4 +1,4 @@
-import { Contact } from './interfaces';
+import { Contact } from '../App/interfaces';
 import ContactItem from './ContactItem';
 import ContactDetail from './ContactDetail';
 import ContactForm from './ContactForm';

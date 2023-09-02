@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { User, Contact } from './interfaces';
+import { User, Contact } from '../App/interfaces';
 
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = "http://localhost:3000";
 
 const userService = {
     getUser: async (userId: string): Promise<User | null> => {
