@@ -28,7 +28,7 @@ const App: React.FC = () => {
                         <Route path="/user/:userId/congrats" element={<CongratulationsPage />} />
                         <Route path="/user/:userId/*" element={<UserPage />} />
                         <Route path="/login" element={<LoginPage />} />
-                        <Route path="/admin" element={
+                        <Route path="/admin/*" element={
                             <PrivateRoute><AdminPage /></PrivateRoute>
                         } />
                     </Routes>

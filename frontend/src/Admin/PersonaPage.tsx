@@ -60,7 +60,7 @@ const PersonaPage: React.FC = () => {
 
     return (
         <Box px={4} py={8}>
-            <Flex justifyContent="space-between" width="100%" align="center">
+            <Flex justifyContent="space-between" width="100%" align="center" pb="6">
                 <Heading size="lg">Personas</Heading>
                 <Button onClick={onOpen} colorScheme="blue" size="md" p={2}>
                     <Icon as={FaPlus} />
