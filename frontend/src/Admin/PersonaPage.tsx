@@ -24,14 +24,23 @@ const PersonaPage: React.FC = () => {
     };
 
     const handleEdit = async (updatedPersona: Persona) => {
+        console.log('Starting handleEdit with:', updatedPersona); // Print the input
+    
         const response = await adminService.updatePersona(updatedPersona.id, updatedPersona.name);
+        console.log('Received response:', response); // Print the response
     
         if (response && personas) {
+            console.log('Updating personas list...'); // Print message before starting update
+            
             const updatedPersonas = personas.map(persona =>
                 persona.id === updatedPersona.id ? updatedPersona : persona
             );
     
+            console.log('Updated personas list:', updatedPersonas); // Print the updated list
+    
             setPersonas(updatedPersonas);
+        } else {
+            console.log('Did not update personas - response or personas was falsy:', {response, personas}); // Print a message if no update happened
         }
     };
 

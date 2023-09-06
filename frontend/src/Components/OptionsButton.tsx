@@ -1,5 +1,3 @@
-'use strict'
-
 import React from 'react';
 import {
     Popover, 
@@ -18,9 +16,10 @@ import { RiPencilLine, RiDeleteBin6Line } from 'react-icons/ri';
 interface OptionsButtonProps {
     onEdit: () => void;
     onDelete: () => void;
+    itemLabel: string; // Add this line
 }
 
-const OptionsButton: React.FC<OptionsButtonProps> = ({ onEdit, onDelete }) => {
+const OptionsButton: React.FC<OptionsButtonProps> = ({ onEdit, onDelete, itemLabel }) => {
     const handleIconButtonClick = (event: React.MouseEvent) => {
         event.stopPropagation();
     };
@@ -40,7 +39,7 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({ onEdit, onDelete }) => {
             <Popover placement="bottom" isLazy>
                 <PopoverTrigger>
                     <IconButton
-                        aria-label="More contact options"
+                        aria-label={`More ${itemLabel} options`}
                         icon={<BsThreeDotsVertical />}
                         variant="solid"
                         w="fit-content"
@@ -60,7 +59,7 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({ onEdit, onDelete }) => {
                                 fontSize="sm"
                                 onClick={handleEditClick}
                             >
-                                Edit Contact
+                                {`Edit ${itemLabel}`}
                             </Button>
                             <Button
                                 w="194px"
@@ -72,7 +71,7 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({ onEdit, onDelete }) => {
                                 fontSize="sm"
                                 onClick={handleDeleteClick}
                             >
-                                Delete Contact
+                                {`Delete ${itemLabel}`}
                             </Button>
                         </Stack>
                     </PopoverBody>

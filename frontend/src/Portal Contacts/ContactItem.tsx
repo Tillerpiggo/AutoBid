@@ -67,7 +67,7 @@ const ContactItem: React.FC<ContactItemProps> = ({
                         onClick={handlePersonalize}
                         persona={contact.persona}
                     />
-                    <OptionsButton onEdit={handleEditFromContactOptions} onDelete={handleDelete} />
+                    <OptionsButton onEdit={handleEditFromContactOptions} onDelete={handleDelete} itemLabel="Contact" />
                 </Flex>
             </Flex>
         </Box>

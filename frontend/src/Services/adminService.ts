@@ -40,22 +40,30 @@ const adminService = {
     },
 
     addPersona: async (newPersona: Omit<Persona, 'id'>): Promise<Persona | null> => {
-        console.log("trying to add persona");
+        console.log("Trying to add persona:", newPersona); // Print the input
+    
         try {
+            const body = JSON.stringify(newPersona);
+            console.log("Request body:", body); // Print the request body
+    
             const response = await fetch(`${API_BASE_URL}/admin/personas`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newPersona),
+                body: body,
             });
-
+    
+            console.log("Response status:", response.status); // Print the response status
+    
             if (!response.ok) {
                 console.error('Failed to add persona');
                 return null;
             }
-
+    
             const updatedPersona = await response.json();
+            console.log("Response body:", updatedPersona); // Print the response body
+    
             return updatedPersona.persona;
         } catch (error) {
             console.error('Failed to add persona', error);

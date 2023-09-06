@@ -28,7 +28,7 @@ const ContactDetail: React.FC<ContactDetailProps> = ({ contact, onEdit, onPerson
                 top={4}
                 right={4}
             >
-                <OptionsButton onEdit={onEdit} onDelete={onDelete} />
+                <OptionsButton onEdit={onEdit} onDelete={onDelete} itemLabel="Contact" />
             </Flex>
 
             <Avatar

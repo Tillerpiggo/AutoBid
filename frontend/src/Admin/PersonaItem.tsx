@@ -35,13 +35,14 @@ const PersonaItem: React.FC<PersonaItemProps> = ({
                 boxShadow: '2xl',
             }}
             transition="all 0.2s"
+            onClick={handleEdit}
         >
             <Stack direction="row" justify="space-between" align="center">
                 <Stack direction="column" spacing={0} fontSize="sm">
                     <Text fontWeight={600}>{persona.name}</Text>
                     <Text color="gray.500">{persona.id}</Text>
                 </Stack>
-                <OptionsButton onEdit={handleEdit} onDelete={handleDelete} />
+                <OptionsButton onEdit={handleEdit} onDelete={handleDelete} itemLabel="Persona" />
             </Stack>
         </Box>
     );

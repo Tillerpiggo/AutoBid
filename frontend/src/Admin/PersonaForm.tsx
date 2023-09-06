@@ -24,7 +24,7 @@ const PersonaForm: React.FC<PersonaFormProps> = ({ persona, onSubmit, doesPerson
   
     const handleSubmit = async () => {
         if (!showWarning) {
-            const updatedPersona: Persona = { id: "id will be created in backend", name: personaName }
+            const updatedPersona: Persona = { id: persona ? persona.id : "id will be created in backend", name: personaName }
             await onSubmit(updatedPersona);
         }
     };
